@@ -17,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:psinsx/widgets/show_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Mapdmsx extends StatefulWidget {
@@ -43,6 +44,10 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   List<Dmsxmodel> dmsxModels = [];
 
+  bool showDirction = false; // ไม่แสดงปุ่ม
+  double latDirection, lngDirection;
+  int indexDirection;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -50,7 +55,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     readDataApi();
   }
 
-  void procressAddMarker(Dmsxmodel dmsxmodel) {
+  void procressAddMarker(Dmsxmodel dmsxmodel, int index) {
     double hueDouble;
 
     switch (dmsxmodel.statusTxt) {
@@ -100,9 +105,20 @@ class _MapdmsxState extends State<Mapdmsx> {
 
     MarkerId markerId = MarkerId(dmsxmodel.id);
     Marker marker = Marker(
+      onTap: () {
+        indexDirection = index;
+        latDirection = double.parse(dmsxmodel.lat.trim());
+        lngDirection = double.parse(dmsxmodel.lng.trim());
+        setState(() {
+          showDirction = true;
+        });
+      },
       icon: BitmapDescriptor.defaultMarkerWithHue(hueDouble),
       infoWindow: InfoWindow(
         onTap: () {
+          print(
+            'click lat = $latDirection , $lngDirection',
+          );
           processAddImage(dmsxmodel);
           if (dmsxmodel.images.isNotEmpty) {
             checkAmountImage(dmsxmodel.images);
@@ -139,6 +155,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
         await Dio().get(path).then(
           (value) {
+            int index = 0;
             for (var item in json.decode(value.data)) {
               Dmsxmodel dmsxmodel = Dmsxmodel.fromMap(item);
               dmsxModels.add(dmsxmodel);
@@ -146,10 +163,11 @@ class _MapdmsxState extends State<Mapdmsx> {
 
               setState(
                 () {
-                  procressAddMarker(dmsxmodel);
+                  procressAddMarker(dmsxmodel, index);
                   load = false;
                 },
               );
+              index++;
             }
           },
         );
@@ -173,6 +191,7 @@ class _MapdmsxState extends State<Mapdmsx> {
               children: [
                 buildMap(),
                 buildControl(),
+                showDirction ? buildDirction() : SizedBox(),
               ],
             ),
       floatingActionButton: FloatingActionButton(
@@ -190,7 +209,65 @@ class _MapdmsxState extends State<Mapdmsx> {
     );
   }
 
-    Future<Null> launchURL() async {
+  Column buildDirction() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ShowText(
+                  text: 'Detail',
+                  textStyle: MyConstant().h2Style(),
+                ),
+                ShowText(text: dmsxModels[indexDirection].cusName),
+                ShowText(text: dmsxModels[indexDirection].address),
+                TextButton(
+                  onPressed: () async {
+                    print('== Tel');
+                    final tel = 'tel:${dmsxModels[indexDirection].tel.trim()}';
+                    if (await canLaunch(tel)) {
+                      await launch(tel);
+                    } else {
+                      throw 'Cannot Phone';
+                    }
+                  },
+                  child: ShowText(text: dmsxModels[indexDirection].tel),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final url =
+                        'https://www.google.com/maps/search/?api=1&query=$latDirection, $lngDirection';
+                    await launch(url);
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      print('Unable to open URL $url');
+                      // throw 'Could not launch $url';
+                    }
+                  },
+                  child: Text('นำทาง'),
+                ),
+                TextButton(
+                    onPressed: () {
+                      processTakePhoto(
+                          dmsxmodel: dmsxModels[indexDirection],
+                          source: ImageSource.gallery);
+                    },
+                    child: ShowText(text: 'เลือกรูป')),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<Null> launchURL() async {
     final url = 'https://www.pea23.com';
     await launch(url);
     if (await canLaunch(url)) {
@@ -241,6 +318,11 @@ class _MapdmsxState extends State<Mapdmsx> {
       initialCameraPosition: _kGooglePlex,
       onMapCreated: (GoogleMapController controller) {
         _controller.complete();
+      },
+      onTap: (argument) {
+        setState(() {
+          showDirction = false;
+        });
       },
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
@@ -358,7 +440,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       );
 
       File file = File(re.files.single.path);
-      print('dmsx filePath = ${file.path}');
+      print('@@dmsx filePath = ${file.path}');
 
       switch (dmsxmodel.statusTxt.trim()) {
         case 'เริ่มงดจ่ายไฟ':
@@ -420,7 +502,8 @@ class _MapdmsxState extends State<Mapdmsx> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.file(file),
-                  createListStatus(setState),
+                  ShowText(text: 'image Name'),
+                  //createListStatus(setState),
                 ],
               ),
             ),
