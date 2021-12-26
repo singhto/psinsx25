@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:psinsx/models/dmsx_model.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
 import 'package:psinsx/utility/my_constant.dart';
+import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/my_utility.dart';
 import 'package:psinsx/widgets/show_proogress.dart';
 import 'package:path_provider/path_provider.dart';
@@ -217,7 +218,7 @@ class _MapdmsxState extends State<Mapdmsx> {
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ShowText(
@@ -226,45 +227,81 @@ class _MapdmsxState extends State<Mapdmsx> {
                 ),
                 ShowText(text: dmsxModels[indexDirection].cusName),
                 ShowText(text: dmsxModels[indexDirection].address),
-                TextButton(
-                  onPressed: () async {
-                    print('== Tel');
-                    final tel = 'tel:${dmsxModels[indexDirection].tel.trim()}';
-                    if (await canLaunch(tel)) {
-                      await launch(tel);
-                    } else {
-                      throw 'Cannot Phone';
-                    }
-                  },
-                  child: ShowText(text: dmsxModels[indexDirection].tel),
+                buildImages(dmsxModels[indexDirection].images),
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        print('== Tel');
+                        final tel =
+                            'tel:${dmsxModels[indexDirection].tel.trim()}';
+                        if (await canLaunch(tel)) {
+                          await launch(tel);
+                        } else {
+                          throw 'Cannot Phone';
+                        }
+                      },
+                      child: ShowText(text: dmsxModels[indexDirection].tel),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final url =
+                            'https://www.google.com/maps/search/?api=1&query=$latDirection, $lngDirection';
+                        await launch(url);
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          print('Unable to open URL $url');
+                          // throw 'Could not launch $url';
+                        }
+                      },
+                      child: Text('นำทาง'),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          processTakePhoto(
+                              dmsxmodel: dmsxModels[indexDirection],
+                              source: ImageSource.gallery);
+                        },
+                        child: ShowText(text: 'เลือกรูป')),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final url =
-                        'https://www.google.com/maps/search/?api=1&query=$latDirection, $lngDirection';
-                    await launch(url);
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      print('Unable to open URL $url');
-                      // throw 'Could not launch $url';
-                    }
-                  },
-                  child: Text('นำทาง'),
-                ),
-                TextButton(
-                    onPressed: () {
-                      processTakePhoto(
-                          dmsxmodel: dmsxModels[indexDirection],
-                          source: ImageSource.gallery);
-                    },
-                    child: ShowText(text: 'เลือกรูป')),
               ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  Widget buildImages(String strings) {
+    if (strings.isEmpty) {
+      return SizedBox();
+    } else {
+      var image = strings.substring(1, strings.length - 1);
+      var images = image.split(',');
+
+      var widgets = <Widget>[];
+      for (var item in images) {
+        print('@@===> ${MyConstant.domainImage}${item.trim()}');
+        widgets.add(
+          Container(
+            margin: EdgeInsets.all(8),
+            width: 100,
+            height: 80,
+            child: CachedNetworkImage(
+              errorWidget: (context, url, error) => MyStyle().showLogo(),
+              imageUrl: '${MyConstant.domainImage}${item.trim()}',
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      }
+
+      return Row(
+        children: widgets,
+      );
+    }
   }
 
   Future<Null> launchURL() async {
@@ -442,6 +479,12 @@ class _MapdmsxState extends State<Mapdmsx> {
       File file = File(re.files.single.path);
       print('@@dmsx filePath = ${file.path}');
 
+      var namePath = file.path;
+      var string = namePath.split('/');
+      var nameImage = string.last;
+      nameImage = nameImage.substring(0, 4);
+      nameImage = converNameImage(nameImage);
+
       switch (dmsxmodel.statusTxt.trim()) {
         case 'เริ่มงดจ่ายไฟ':
           titleStatuss = MyConstant.statusTextsNonJay;
@@ -502,13 +545,17 @@ class _MapdmsxState extends State<Mapdmsx> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.file(file),
-                  ShowText(text: 'image Name'),
+                  ShowText(
+                    text: nameImage,
+                    textStyle: MyConstant().h2Style(),
+                  ),
                   //createListStatus(setState),
                 ],
               ),
             ),
             actions: [
-              showUpload ? buttonUpImage(context, file, dmsxmodel) : SizedBox(),
+              //showUpload ? buttonUpImage(context, file, dmsxmodel) : SizedBox(),
+              buttonUpImage(context, file, dmsxmodel),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text('ยกเลิก'),
@@ -530,7 +577,8 @@ class _MapdmsxState extends State<Mapdmsx> {
         print('dmsx name[0] = ${name[0]}');
         print('dmsx code = $code');
 
-        if (code != dmsxmodel.ca && code != dmsxmodel.peaNo) {
+        //if (code != dmsxmodel.ca && code != dmsxmodel.peaNo) {
+        if (code != dmsxmodel.peaNo) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -558,6 +606,9 @@ class _MapdmsxState extends State<Mapdmsx> {
           await Dio().post(pathUpload, data: data).then((value) async {
             print('# === value for upload ==>> $value');
             List<String> images = [];
+            var listStatus = <String>[];
+
+            print('@@ statusText === $statusText');
 
             if (dmsxmodel.images.isEmpty) {
               images.add(nameFile);
@@ -571,6 +622,17 @@ class _MapdmsxState extends State<Mapdmsx> {
                 index++;
               }
               images.add(nameFile);
+
+              String statusTextCurrent = dmsxmodel.statusTxt;
+              statusTextCurrent =
+                  statusTextCurrent.substring(1, statusTextCurrent.length - 1);
+              listStatus = statusTextCurrent.split(',');
+              int i = 0;
+              for (var item in listStatus) {
+                listStatus[i] = item.trim();
+                i++;
+              }
+              listStatus.add(statusText);
             }
 
             String readNumber = 'ดำเนินการแล้ว';
@@ -580,6 +642,8 @@ class _MapdmsxState extends State<Mapdmsx> {
             } else {
               readNumber = 'ต่อกลับแล้ว';
             }
+
+            print('@@ listStatus === $listStatus');
 
             String apiEditImages =
                 'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
@@ -639,4 +703,50 @@ class _MapdmsxState extends State<Mapdmsx> {
     }
     print('### checkAmountImagebol ล่าสุด ==> $checkAmountImagebol');
   }
+
+  String converNameImage(String nameImage) {
+    switch (nameImage) {
+      case 'ASGD':
+        statusText = 'เริ่มงดจ่ายไฟ';
+        return statusText;
+        break;
+      case 'WMMI':
+        statusText = 'ต่อมิเตอร์แล้ว';
+        return statusText;
+        break;
+      case 'WMMR':
+        statusText = 'ถอดมิเตอร์แล้ว';
+        return statusText;
+        break;
+      case 'FUCN':
+        statusText = 'ต่อสายแล้ว';
+        return statusText;
+        break;
+      case 'FURM':
+        statusText = 'ปลดสายแล้ว';
+        return statusText;
+        break;
+      case 'WMST':
+        statusText = 'ผ่อนผันครั้งที่ 1';
+        return statusText;
+        break;
+      case 'WMS2':
+        statusText = 'ผ่อนผันครั้งที่ 2';
+        return statusText;
+        break;
+      default:
+        {
+          statusText = 'รูปภาพไม่ถูกต้อง';
+          return statusText;
+        }
+    }
+  }
 }
+
+// ASGD = เริ่มงดจ่ายไฟ
+// WMMI = ต่อมิเตอร์แล้ว
+// WMMR = ถอดมิเตอร์แล้ว
+// FUCN = ต่อสายแล้ว
+// FURM = ปลดสายแล้ว
+// WMST = ผ่อนผันครั้งที่ 1
+// WMS2 = ผ่อนผันครั้งที่ 2

@@ -40,10 +40,17 @@ class _AddOutLayState extends State<AddOutLay> {
   File file;
   DateTime selectedDate = DateTime.now();
 
+  var typeOiles = MyConstant.typeOils;
+  var dropdownMenuItems = <DropdownMenuItem>[];
+
   @override
   void initState() {
     super.initState();
     subModel = widget.subModel;
+
+    for (var item in typeOiles) {
+      
+    }
   }
 
   @override
@@ -62,6 +69,7 @@ class _AddOutLayState extends State<AddOutLay> {
               SizedBox(height: 20),
               dataSub(),
               SizedBox(height: 20),
+              //newTypeOil(),
               detailProductFrom(),
               SizedBox(height: 20),
               valumeFrom(),
@@ -84,6 +92,11 @@ class _AddOutLayState extends State<AddOutLay> {
       ),
     );
   }
+
+  Widget newTypeOil() => DropdownButton<String>(
+        items: dropdownMenuItems,
+        onChanged: (value) {},
+      );
 
   Future<Null> chooseImage(ImageSource source) async {
     try {
@@ -152,7 +165,6 @@ class _AddOutLayState extends State<AddOutLay> {
                 normalDialog(context, 'กรุกณากรอข้อมูลให้ครบทุกช่อง');
               } else {
                 uploadOutlayInserData();
-                
               }
             },
             child: Text(
@@ -201,13 +213,11 @@ class _AddOutLayState extends State<AddOutLay> {
         await Dio().get(urlInsertData);
         showToast('อัพโหลดสำเร็จ', gravity: Toast.CENTER);
         routeTuService();
-
       });
     } catch (e) {}
   }
 
-   Future<Null> routeTuService() async {
-   
+  Future<Null> routeTuService() async {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => OilPage(),
     );

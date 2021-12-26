@@ -79,7 +79,6 @@ class _OilPageState extends State<OilPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Colors.green,
         onPressed: () {
           routeToSeachOutlay();
         },
@@ -144,7 +143,9 @@ class _OilPageState extends State<OilPage> {
         return Card(
           child: ListTile(
             onLongPress: () => deleteOutlay(outLayModels[index]),
-            leading: Image.network(
+            leading: 
+            // Text('${MyConstant.domainImage}${outLayModels[index].image}'),
+            Image.network(
               outLayModels[index].image,
               fit: BoxFit.cover,
               width: 60,
@@ -169,7 +170,7 @@ class _OilPageState extends State<OilPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${outLayModels[index].createdAt}',
+                      '${outLayModels[index].createdAt} ${outLayModels[index].outlayStatus}',
                       style: TextStyle(
                         fontSize: 10,
                       ),

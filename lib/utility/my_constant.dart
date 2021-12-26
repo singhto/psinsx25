@@ -7,6 +7,10 @@ class MyConstant {
 
   static String domainImage = 'https://pea23.com/apipsinsx/dmsxupload/';
 
+  static List<String> typeOils = [
+    'เบนซิน91', 'เบนซิน95' , 'ดีเซล'
+  ];
+
 //เริ่มงดจ่ายไฟ
   static List<String> statusTextsNonJay = [
     'ขอผ่อนผันครั้งที่ 1',

@@ -9,6 +9,7 @@ import 'package:psinsx/pages/help_page.dart';
 import 'package:psinsx/pages/information_user.dart';
 import 'package:psinsx/pages/map.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
+import 'package:psinsx/pages/oil_page.dart';
 import 'package:psinsx/pages/pea_report.dart';
 import 'package:psinsx/pages/perpay.dart';
 import 'package:psinsx/pages/search_page.dart';
@@ -151,6 +152,19 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) => PerPay()));
+                }),
+            ListTile(
+                leading: Icon(Icons.money),
+                title: Text('เบิกน้ำมัน'),
+                subtitle: Text(
+                  'ระบบเบิกค่าน้ำมัน',
+                  style: TextStyle(fontSize: 10),
+                ),
+                trailing: Icon(Icons.arrow_right),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => OilPage()));
                 }),
             ListTile(
                 leading: Icon(Icons.help),
