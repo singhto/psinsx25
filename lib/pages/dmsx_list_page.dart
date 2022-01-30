@@ -37,7 +37,10 @@ class _DmsxListPageState extends State<DmsxListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ข้อมูล ${dmsxModels.length} รายการ',style: TextStyle(fontSize: 14),),
+        title: Text(
+          'ข้อมูล ${dmsxModels.length} รายการ',
+          style: TextStyle(fontSize: 14),
+        ),
       ),
       body: dmsxModels.isEmpty
           ? ShowProgress()
@@ -89,7 +92,7 @@ class _DmsxListPageState extends State<DmsxListPage> {
       itemCount: searchDmsxModels.length,
       itemBuilder: (context, index) => InkWell(
         onTap: () {
-          Navigator.pop(context,  [searchDmsxModels[index]]);
+          Navigator.pop(context, [searchDmsxModels[index]]);
         },
         child: Card(
           child: Padding(
@@ -100,17 +103,59 @@ class _DmsxListPageState extends State<DmsxListPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ShowTitle(
-                        title: searchDmsxModels[index].cusName.trim(),
-                        textStyle: MyConstant().h3Style(),
-                      ),
-                      ShowTitle(title: searchDmsxModels[index].line.trim(), textStyle: MyConstant().h4Style(),),
                       Row(
                         children: [
-                          Text('ล่าสุด: ',style: TextStyle(fontSize: 10),),
-                          ShowTitle(title: searchDmsxModels[index].statusTxt.trim(), textStyle: MyConstant().h5Style(),),
+                          ShowTitle(
+                            title: searchDmsxModels[index].cusName.trim(),
+                            textStyle: MyConstant().h3Style(),
+                          ),
                         ],
-                      )
+                      ),
+                      ShowTitle(
+                        title: searchDmsxModels[index].line.trim(),
+                        textStyle: MyConstant().h4Style(),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'ล่าสุด: ',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                          ShowTitle(
+                            title: searchDmsxModels[index].statusTxt.trim(),
+                            textStyle: MyConstant().h5Style(),
+                          ),
+                        ],
+                      ),
+                       Row(
+                         children: [
+                           ShowTitle(
+                            title: 'PEA:',
+                            textStyle: MyConstant().h4Style(),
+                      ),
+                      ShowTitle(
+                            title: searchDmsxModels[index].peaNo.trim(),
+                            textStyle: MyConstant().h4Style(),
+                      ),
+                         ],
+                       ),
+                      Row(
+                        children: [
+                            ShowTitle(
+                            title: 'พิกัด:',
+                            textStyle: MyConstant().h5Style(),
+                          ),
+                          ShowTitle(
+                            title: searchDmsxModels[index].lat.trim(),
+                            textStyle: MyConstant().h5Style(),
+                          ),
+                          Text(', ',style: TextStyle(fontSize: 12),),
+                          ShowTitle(
+                            title: searchDmsxModels[index].lng.trim(),
+                            textStyle: MyConstant().h5Style(),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

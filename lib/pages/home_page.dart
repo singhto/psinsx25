@@ -180,32 +180,6 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(builder: (context) => HelpPage()));
                 }),
             ListTile(
-                leading: Icon(Icons.work_off),
-                title: Text('เลิกงาน'),
-                subtitle: Text(
-                  'ลงเวลาเลิกงาน',
-                  style: TextStyle(fontSize: 10),
-                ),
-                trailing: Icon(Icons.arrow_right),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/outTime');
-                
-                }),
-            // ListTile(
-            //     leading: Icon(Icons.add_comment),
-            //     title: Text('งดจ่ายไฟ'),
-            //     subtitle: Text(
-            //       'งานงดจ่ายไฟในระบบ Dmsx',
-            //       style: TextStyle(fontSize: 10),
-            //     ),
-            //     trailing: Icon(Icons.arrow_right),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.of(context).push(
-            //           MaterialPageRoute(builder: (context) => DmsxPage()));
-            //     }),
-            ListTile(
               leading: Icon(Icons.logout),
               title: Text('ออกจากระบบ'),
               subtitle: Text(

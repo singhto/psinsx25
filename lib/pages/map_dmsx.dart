@@ -218,49 +218,44 @@ class _MapdmsxState extends State<Mapdmsx> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ShowText(text: 'เลขสาย: '),
-                    ShowText(text: dmsxModels[indexDirection].line),
+                    ShowText(text: 'สาย: ${dmsxModels[indexDirection].line}'),
+                    SizedBox(width: 10),
+                    ShowText(text: 'ca: ${dmsxModels[indexDirection].ca}'),
                   ],
                 ),
                 SizedBox(width: 20),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ShowText(text: 'ca: '),
-                    ShowText(text: dmsxModels[indexDirection].ca),
+                    ShowText(text: 'PEA: ${dmsxModels[indexDirection].peaNo}'),
+                    ShowText(text: 'สถานะล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
                   ],
                 ),
-                SizedBox(width: 20),
                 Row(
                   children: [
-                    ShowText(text: 'PEA: '),
-                    ShowText(text: dmsxModels[indexDirection].peaNo),
+                    ShowText(text: 'ชื่อ:'),
+                    ShowText(text: dmsxModels[indexDirection].cusName),
                   ],
                 ),
-                ShowText(text: dmsxModels[indexDirection].cusName),
                 ShowText(text: dmsxModels[indexDirection].address),
-                Row(
-                  children: [
-                    ShowText(text: 'สถานะล่าสุด: '),
-                    ShowText(text: dmsxModels[indexDirection].statusTxt),
-                  ],
-                ),
                 buildImages(dmsxModels[indexDirection].images),
-                TextButton(
-                  onPressed: () async {
-                    //print('== Tel');
-                    final tel = 'tel:${dmsxModels[indexDirection].tel.trim()}';
-                    if (await canLaunch(tel)) {
-                      await launch(tel);
-                    } else {
-                      throw 'Cannot Phone';
-                    }
-                  },
-                  child: ShowText(text: dmsxModels[indexDirection].tel),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          //print('== Tel');
+                          final tel =
+                              'tel:${dmsxModels[indexDirection].tel.trim()}';
+                          if (await canLaunch(tel)) {
+                            await launch(tel);
+                          } else {
+                            throw 'Cannot Phone';
+                          }
+                        },
+                        child: ShowText(text: 'โทร')),
                     ElevatedButton(
                       onPressed: () async {
                         final url =
@@ -507,9 +502,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       File file = File(re.files.single.path);
       print('@@dmsx filePath = ${file.path}');
 
-      setState(() {
-        
-      });
+      setState(() {});
 
       var namePath = file.path;
       var string = namePath.split('/');
@@ -616,7 +609,8 @@ class _MapdmsxState extends State<Mapdmsx> {
 
         print('dmsx code = $code');
 
-        if ((code.trim() != dmsxmodel.ca.trim()) && (code.trim() != dmsxmodel.peaNo.trim())) {
+        if ((code.trim() != dmsxmodel.ca.trim()) &&
+            (code.trim() != dmsxmodel.peaNo.trim())) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -638,7 +632,6 @@ class _MapdmsxState extends State<Mapdmsx> {
           if (dmsxmodel.images?.isEmpty ?? true) {
             await processUploadAndEdit(file, nameFile, dmsxmodel);
           } else {
-
             String string = dmsxmodel.images;
             string = string.substring(1, string.length - 1);
             List<String> images = string.split(',');
