@@ -36,11 +36,12 @@ Future<Null> main() async {
     initialRount = '/signIn';
     runApp(MyApp());
   } else {
+    
     DateTime dateTime = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
     var currentDate = dateFormat.format(dateTime).toString();
-    print('@@create_by $string \n @@ currentDate == $currentDate');
+    //print('@@create_by $string \n @@ currentDate == $currentDate');
 
     var workTimeModels = <WorkTimeModel>[];
 

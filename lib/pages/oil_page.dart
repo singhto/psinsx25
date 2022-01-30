@@ -145,8 +145,10 @@ class _OilPageState extends State<OilPage> {
             onLongPress: () => deleteOutlay(outLayModels[index]),
             leading: 
             // Text('${MyConstant.domainImage}${outLayModels[index].image}'),
+            
             Image.network(
               outLayModels[index].image,
+           
               fit: BoxFit.cover,
               width: 60,
               height: 80,

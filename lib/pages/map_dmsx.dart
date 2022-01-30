@@ -59,35 +59,23 @@ class _MapdmsxState extends State<Mapdmsx> {
   void procressAddMarker(Dmsxmodel dmsxmodel, int index) {
     double hueDouble;
 
+    switch (dmsxmodel.readNumber) {
+      case 'ดำเนินการแล้ว':
+        hueDouble = 0;
+        break;
+      case 'ต่อกลับแล้ว':
+        hueDouble = 60;
+        break;
+      default:
+        hueDouble = 120;
+        break;
+    }
+
     switch (dmsxmodel.statusTxt) {
-      case 'งดจ่ายไม่ได้':
-        hueDouble = 0;
-        break;
-      case 'สั่งระงับการปฏิบัติงาน':
-        hueDouble = 250;
-        break;
-      case 'สั่งระงับ (ชำระเงินระหว่างขอผ่อนผัน':
-        hueDouble = 250;
-        break;
-      case 'รับทราบคำสั่งระงับ':
-        hueDouble = 250;
-        break;
-      case 'ขอผ่อนผันครั้งที่ 1':
-        hueDouble = 0;
-        break;
-      case 'ขอผ่อนผันครั้งที่ 2':
-        hueDouble = 0;
-        break;
-      case 'ปลดสายแล้ว':
-        hueDouble = 0;
-        break;
-      case 'ถอดมิเตอร์แล้ว':
-        hueDouble = 0;
-        break;
-      case 'ให้ต่อสาย':
+      case 'ให้ต่อมิเตอร์':
         hueDouble = 300;
         break;
-      case 'ให้ต่อมิเตอร์':
+      case 'ให้ต่อสาย':
         hueDouble = 300;
         break;
       case 'ต่อสายแล้ว':
@@ -96,11 +84,53 @@ class _MapdmsxState extends State<Mapdmsx> {
       case 'ต่อมิเตอร์แล้ว':
         hueDouble = 60;
         break;
-
-      default:
-        hueDouble = 120;
-        break;
+      // default:
+      //   hueDouble = 120;
+      //   break;
     }
+
+    // switch (dmsxmodel.statusTxt) {
+    //   case 'งดจ่ายไม่ได้':
+    //     hueDouble = 0;
+    //     break;
+    //   case 'สั่งระงับการปฏิบัติงาน':
+    //     hueDouble = 250;
+    //     break;
+    //   case 'สั่งระงับ (ชำระเงินระหว่างขอผ่อนผัน':
+    //     hueDouble = 250;
+    //     break;
+    //   case 'รับทราบคำสั่งระงับ':
+    //     hueDouble = 250;
+    //     break;
+    //   case 'ผ่อนผันครั้งที่ 1':
+    //     hueDouble = 120;
+    //     break;
+    //   case 'ผ่อนผันครั้งที่ 2':
+    //     hueDouble = 120;
+    //     break;
+    //   case 'ปลดสายแล้ว':
+    //     hueDouble = 0;
+    //     break;
+    //   case 'ถอดมิเตอร์แล้ว':
+    //     hueDouble = 0;
+    //     break;
+    //   case 'ให้ต่อสาย':
+    //     hueDouble = 300;
+    //     break;
+    //   case 'ให้ต่อมิเตอร์':
+    //     hueDouble = 300;
+    //     break;
+    //   case 'ต่อสายแล้ว':
+    //     hueDouble = 60;
+    //     break;
+    //   case 'ต่อมิเตอร์แล้ว':
+    //     hueDouble = 60;
+    //     break;
+
+    //   default:
+    //     hueDouble = 120;
+    //     break;
+    // }
 
     print('## hueDouble == $hueDouble');
 
@@ -116,14 +146,15 @@ class _MapdmsxState extends State<Mapdmsx> {
       },
       icon: BitmapDescriptor.defaultMarkerWithHue(hueDouble),
       infoWindow: InfoWindow(
+        
         onTap: () {
           print(
             'click lat = $latDirection , $lngDirection',
           );
-          processAddImage(dmsxmodel);
-          if (dmsxmodel.images.isNotEmpty) {
-            checkAmountImage(dmsxmodel.images);
-          }
+          // processAddImage(dmsxmodel);
+          // if (dmsxmodel.images.isNotEmpty) {
+          //   checkAmountImage(dmsxmodel.images);
+          // }
         },
         title: '${dmsxmodel.employeeId}',
         snippet: 'PEA : ${dmsxmodel.peaNo}',
@@ -195,13 +226,13 @@ class _MapdmsxState extends State<Mapdmsx> {
                 showDirction ? buildDirction() : SizedBox(),
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.purple,
-          onPressed: () {
-            print('object');
-            launchURL();
-          },
-          child: Icon(Icons.download)),
+      // floatingActionButton: FloatingActionButton(
+      //     backgroundColor: Colors.purple,
+      //     onPressed: () {
+      //       print('object');
+      //       launchURL();
+      //     },
+      //     child: Icon(Icons.download)),
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       //backgroundColor: Colors.purple,
       bottomNavigationBar: BottomAppBar(
@@ -218,31 +249,54 @@ class _MapdmsxState extends State<Mapdmsx> {
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ShowText(
-                  text: 'Detail',
-                  textStyle: MyConstant().h2Style(),
+                Row(
+                  children: [
+                    ShowText(text: 'เลขสาย: '),
+                    ShowText(text: dmsxModels[indexDirection].line),
+                  ],
+                ),
+                SizedBox(width: 20),
+                Row(
+                  children: [
+                    ShowText(text: 'ca: '),
+                    ShowText(text: dmsxModels[indexDirection].ca),
+                  ],
+                ),
+                SizedBox(width: 20),
+                Row(
+                  children: [
+                    ShowText(text: 'PEA: '),
+                    ShowText(text: dmsxModels[indexDirection].peaNo),
+                  ],
                 ),
                 ShowText(text: dmsxModels[indexDirection].cusName),
                 ShowText(text: dmsxModels[indexDirection].address),
-                buildImages(dmsxModels[indexDirection].images),
                 Row(
                   children: [
-                    TextButton(
-                      onPressed: () async {
-                        print('== Tel');
-                        final tel =
-                            'tel:${dmsxModels[indexDirection].tel.trim()}';
-                        if (await canLaunch(tel)) {
-                          await launch(tel);
-                        } else {
-                          throw 'Cannot Phone';
-                        }
-                      },
-                      child: ShowText(text: dmsxModels[indexDirection].tel),
-                    ),
+                    ShowText(text: 'สถานะล่าสุด: '),
+                    ShowText(text: dmsxModels[indexDirection].statusTxt),
+                  ],
+                ),
+                buildImages(dmsxModels[indexDirection].images),
+                TextButton(
+                  onPressed: () async {
+                    //print('== Tel');
+                    final tel = 'tel:${dmsxModels[indexDirection].tel.trim()}';
+                    if (await canLaunch(tel)) {
+                      await launch(tel);
+                    } else {
+                      throw 'Cannot Phone';
+                    }
+                  },
+                  child: ShowText(text: dmsxModels[indexDirection].tel),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                     ElevatedButton(
                       onPressed: () async {
                         final url =
@@ -257,7 +311,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                       },
                       child: Text('นำทาง'),
                     ),
-                    TextButton(
+                    ElevatedButton(
                         onPressed: () {
                           processTakePhoto(
                               dmsxmodel: dmsxModels[indexDirection],
@@ -318,12 +372,14 @@ class _MapdmsxState extends State<Mapdmsx> {
   Widget buildControl() => Padding(
         padding: const EdgeInsets.only(top: 60),
         child: InkWell(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
-            ),
-          ).then((value) => readDataApi()),
+          onTap: () {},
+          // => Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
+          //   ),
+          // ).then((value) => readDataApi()),
+
           child: Container(
             width: 60,
             height: 70,
@@ -577,8 +633,8 @@ class _MapdmsxState extends State<Mapdmsx> {
         print('dmsx name[0] = ${name[0]}');
         print('dmsx code = $code');
 
-        //if (code != dmsxmodel.ca && code != dmsxmodel.peaNo) {
-        if (code != dmsxmodel.peaNo) {
+        if (code != dmsxmodel.ca && code != dmsxmodel.peaNo) {
+          //if (code != dmsxmodel.peaNo) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(

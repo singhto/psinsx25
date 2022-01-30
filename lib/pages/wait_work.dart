@@ -14,19 +14,20 @@ class _WaitWorkState extends State<WaitWork> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Wait Work'),
+          title: Center(child: Text('สาถานะ: เลิกงานแล้ว')),
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ShowText(
-                text: 'คุณลงชื่ออกจากงานแล้ว นิ',
+                text: 'คุณลงชื่อเลิกงานแล้ว นิ!',
                 textStyle: MyConstant().h2Style(),
               ),
+              SizedBox(height: 30,),
               ElevatedButton(
                 onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/homePage', (route) => false),
-                child: Text('ขออนุญาติเข้าแอพอีกครั้ง'),
+                child: Text('ขออนุญาติเข้าแอพอีกครั้ง',style: TextStyle(fontSize: 18),),
               ),
             ],
           ),

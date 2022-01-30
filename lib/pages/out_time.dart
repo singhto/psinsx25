@@ -74,7 +74,7 @@ class _OutTimeState extends State<OutTime> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ลงชื่อออกงาน'),
+        title: Center(child: Text('ลงเวลาเลิกงาน')),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
@@ -131,16 +131,19 @@ class _OutTimeState extends State<OutTime> {
           margin: EdgeInsets.symmetric(vertical: 16),
           width: 200,
           height: 200,
-          child: file == null ? Logo() : Image.file(file, fit: BoxFit.cover),
-        ),
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: IconButton(
+          child: file == null ? IconButton(
             onPressed: () => processTakePhoto(),
-            icon: Icon(Icons.add_a_photo),
-          ),
+            icon: Icon(Icons.add_a_photo, size: 180,),
+          ) : Image.file(file, fit: BoxFit.cover),
         ),
+        // Positioned(
+        //   right: 0,
+        //   bottom: 0,
+        //   child: IconButton(
+        //     onPressed: () => processTakePhoto(),
+        //     icon: Icon(Icons.add_a_photo),
+        //   ),
+        // ),
       ],
     );
   }
@@ -186,11 +189,11 @@ class _OutTimeState extends State<OutTime> {
             await Dio().post(path, data: formData).then((value) async {
               //inseart value to DB
               print(
-                  '@@@ date_work ==> $datWork, startWork ==> $outWork, startImage ==>> $nameFile, creatby ==> $createby');
+                  '@@@ date_work ==> $datWork, outWork ==> $outWork, startImage ==>> $nameFile, creatby ==> $createby');
               print('@@ lat = $lat, lng == $lng');
 
               String pathEdit =
-                  'https://pea23.com/apipsinsx/editWorkTimeWhereDatWork.php?isAdd=true&dat_work=$datWork&out_work=$outWork&out_work_image=$nameFile&out_work_lat=$lat&out_work_lng=$lng';
+                  'https://pea23.com/apipsinsx/editWorkTimeWhereDatWork.php?isAdd=true&dat_work=$datWork&out_work=$outWork&out_work_image=$nameFile&out_work_lat=$lat&out_work_lng=$lng&create_by=$createby';
 
               await Dio().get(pathEdit).then((value) {
                 if (value.toString() == 'true') {
@@ -206,7 +209,7 @@ class _OutTimeState extends State<OutTime> {
         }
       },
       child: Text(
-        'ลงเวลางาน',
+        'บันทึกเวลาเลิกงาน',
         style: MyConstant().h2Style(),
       ),
     );

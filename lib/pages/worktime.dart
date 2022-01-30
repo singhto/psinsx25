@@ -39,13 +39,13 @@ class _WorkTimeState extends State<WorkTime> {
     findLatLng();
   }
 
-  Future<void> findLatLng()async{
+  Future<void> findLatLng() async {
     Position position = await findPosition();
     lat = position.latitude;
     lng = position.longitude;
   }
 
-  Future<Position> findPosition()async{
+  Future<Position> findPosition() async {
     try {
       return await Geolocator.getCurrentPosition();
     } catch (e) {
@@ -62,7 +62,6 @@ class _WorkTimeState extends State<WorkTime> {
     showDate = showDateFormat.format(dateTime);
     datWork = datworkFormat.format(dateTime);
 
-
     SharedPreferences preferences = await SharedPreferences.getInstance();
     createby = preferences.getString('id');
 
@@ -75,7 +74,7 @@ class _WorkTimeState extends State<WorkTime> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ลงชื่อเข้า-ออก งาน'),
+        title: Center(child: Text('ลงชื่อเข้างาน')),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
@@ -132,16 +131,21 @@ class _WorkTimeState extends State<WorkTime> {
           margin: EdgeInsets.symmetric(vertical: 16),
           width: 200,
           height: 200,
-          child: file == null ? Logo() : Image.file(file, fit: BoxFit.cover),
+          child: file == null
+              ? IconButton(
+                  onPressed: () => processTakePhoto(),
+                  icon: Icon(Icons.add_a_photo,size: 180,),
+                )
+              : Image.file(file, fit: BoxFit.cover),
         ),
-        Positioned(
-          right: 0,
-          bottom: 0,
-          child: IconButton(
-            onPressed: () => processTakePhoto(),
-            icon: Icon(Icons.add_a_photo),
-          ),
-        ),
+        // Positioned(
+        //   right: 0,
+        //   bottom: 0,
+        //   child: IconButton(
+        //     onPressed: () => processTakePhoto(),
+        //     icon: Icon(Icons.add_a_photo),
+        //   ),
+        // ),
       ],
     );
   }
@@ -181,33 +185,35 @@ class _WorkTimeState extends State<WorkTime> {
             Map<String, dynamic> map = {};
             map['file'] =
                 await MultipartFile.fromFile(file.path, filename: nameFile);
-                FormData formData = FormData.fromMap(map);
+            FormData formData = FormData.fromMap(map);
 
-                var path = 'https://pea23.com/saveImage.php';
-                await Dio().post(path, data: formData).then((value) async {
-                  //inseart value to DB
-                  print('@@@ date_work ==> $datWork, startWork ==> $startWork, startImage ==>> $nameFile, creatby ==> $createby');
-                  print('@@ lat = $lat, lng == $lng');
+            var path = 'https://pea23.com/saveImage.php';
+            await Dio().post(path, data: formData).then((value) async {
+              //inseart value to DB
+              // print(
+              //     '@@@ date_work ==> $datWork, startWork ==> $startWork, startImage ==>> $nameFile, creatby ==> $createby');
+              // print('@@ lat = $lat, lng == $lng');
 
-                String pathInsert = 'https://pea23.com/apipsinsx/addWorkTime.php?isAdd=true&dat_work=$datWork&start_work=$startWork&start_work_image=$nameFile&create_by=$createby&start_work_lat=$lat&start_work_lng=$lng';
-                await Dio().get(pathInsert).then((value) {
-                  if (value.toString() == 'true') {
-                    print('@@ Success Insert');
-                    
-                    Fluttertoast.showToast(msg:  'เข้างานสำเร็จ', toastLength: Toast.LENGTH_LONG);
-                    Navigator.pushNamedAndRemoveUntil(context, '/homePage', (route) => false);
-                  } else {
-                    normalDialog(context, 'Have Error');
-                  }
-                });
+              String pathInsert =
+                  'https://pea23.com/apipsinsx/addWorkTime.php?isAdd=true&dat_work=$datWork&start_work=$startWork&start_work_image=$nameFile&create_by=$createby&start_work_lat=$lat&start_work_lng=$lng';
+              await Dio().get(pathInsert).then((value) {
+                if (value.toString() == 'true') {
+                  // print('@@ Success Insert');
 
-
-                });
+                  Fluttertoast.showToast(
+                      msg: 'ลงเวลาเข้างานสำเร็จ', toastLength: Toast.LENGTH_LONG);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/homePage', (route) => false);
+                } else {
+                  normalDialog(context, 'Error กรุณาลองใหม่ครับ');
+                }
+              });
+            });
           }
         }
       },
       child: Text(
-        'ลงเวลางาน',
+        'ลงเวลาเข้างาน',
         style: MyConstant().h2Style(),
       ),
     );
