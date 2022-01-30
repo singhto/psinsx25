@@ -88,13 +88,9 @@ class _DmsxListPageState extends State<DmsxListPage> {
       physics: ScrollPhysics(),
       itemCount: searchDmsxModels.length,
       itemBuilder: (context, index) => InkWell(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                ShowCusnameDetail(dmsxmodel: searchDmsxModels[index]),
-          ),
-        ),
+        onTap: () {
+          Navigator.pop(context,  [searchDmsxModels[index]]);
+        },
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(18.0),

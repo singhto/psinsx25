@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:psinsx/models/dmsx_model.dart';
@@ -13,6 +14,7 @@ import 'package:psinsx/pages/dmsx_list_page.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/my_utility.dart';
+import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/widgets/show_proogress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
@@ -29,7 +31,9 @@ class Mapdmsx extends StatefulWidget {
 class _MapdmsxState extends State<Mapdmsx> {
   Completer<GoogleMap> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  GoogleMapController mapController;
+
+  CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(14.813808171680567, 100.96669116372476),
     zoom: 6,
   );
@@ -48,6 +52,8 @@ class _MapdmsxState extends State<Mapdmsx> {
   bool showDirction = false; // ไม่แสดงปุ่ม
   double latDirection, lngDirection;
   int indexDirection;
+
+  bool haveData; //true == haveData
 
   @override
   void initState() {
@@ -84,55 +90,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       case 'ต่อมิเตอร์แล้ว':
         hueDouble = 60;
         break;
-      // default:
-      //   hueDouble = 120;
-      //   break;
     }
-
-    // switch (dmsxmodel.statusTxt) {
-    //   case 'งดจ่ายไม่ได้':
-    //     hueDouble = 0;
-    //     break;
-    //   case 'สั่งระงับการปฏิบัติงาน':
-    //     hueDouble = 250;
-    //     break;
-    //   case 'สั่งระงับ (ชำระเงินระหว่างขอผ่อนผัน':
-    //     hueDouble = 250;
-    //     break;
-    //   case 'รับทราบคำสั่งระงับ':
-    //     hueDouble = 250;
-    //     break;
-    //   case 'ผ่อนผันครั้งที่ 1':
-    //     hueDouble = 120;
-    //     break;
-    //   case 'ผ่อนผันครั้งที่ 2':
-    //     hueDouble = 120;
-    //     break;
-    //   case 'ปลดสายแล้ว':
-    //     hueDouble = 0;
-    //     break;
-    //   case 'ถอดมิเตอร์แล้ว':
-    //     hueDouble = 0;
-    //     break;
-    //   case 'ให้ต่อสาย':
-    //     hueDouble = 300;
-    //     break;
-    //   case 'ให้ต่อมิเตอร์':
-    //     hueDouble = 300;
-    //     break;
-    //   case 'ต่อสายแล้ว':
-    //     hueDouble = 60;
-    //     break;
-    //   case 'ต่อมิเตอร์แล้ว':
-    //     hueDouble = 60;
-    //     break;
-
-    //   default:
-    //     hueDouble = 120;
-    //     break;
-    // }
-
-    print('## hueDouble == $hueDouble');
 
     MarkerId markerId = MarkerId(dmsxmodel.id);
     Marker marker = Marker(
@@ -146,15 +104,10 @@ class _MapdmsxState extends State<Mapdmsx> {
       },
       icon: BitmapDescriptor.defaultMarkerWithHue(hueDouble),
       infoWindow: InfoWindow(
-        
         onTap: () {
           print(
             'click lat = $latDirection , $lngDirection',
           );
-          // processAddImage(dmsxmodel);
-          // if (dmsxmodel.images.isNotEmpty) {
-          //   checkAmountImage(dmsxmodel.images);
-          // }
         },
         title: '${dmsxmodel.employeeId}',
         snippet: 'PEA : ${dmsxmodel.peaNo}',
@@ -187,19 +140,29 @@ class _MapdmsxState extends State<Mapdmsx> {
 
         await Dio().get(path).then(
           (value) {
-            int index = 0;
-            for (var item in json.decode(value.data)) {
-              Dmsxmodel dmsxmodel = Dmsxmodel.fromMap(item);
-              dmsxModels.add(dmsxmodel);
-              print('#id == ${dmsxmodel.id}');
+            setState(() {
+              load = false;
+            });
+            if (value.toString() != 'null') {
+              int index = 0;
+              for (var item in json.decode(value.data)) {
+                Dmsxmodel dmsxmodel = Dmsxmodel.fromMap(item);
+                dmsxModels.add(dmsxmodel);
+                print('#id == ${dmsxmodel.id}');
 
-              setState(
-                () {
-                  procressAddMarker(dmsxmodel, index);
-                  load = false;
-                },
-              );
-              index++;
+                setState(
+                  () {
+                    haveData = true;
+                    procressAddMarker(dmsxmodel, index);
+                    load = false;
+                  },
+                );
+                index++;
+              }
+            } else {
+              setState(() {
+                haveData = false;
+              });
             }
           },
         );
@@ -211,32 +174,33 @@ class _MapdmsxState extends State<Mapdmsx> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: load
-          ? Container(
-              child: Center(
-                child: Text(
-                  'ไม่มีข้อมูล',
-                  style: TextTheme().bodyText1,
-                ),
-              ),
-            )
-          : Stack(
-              children: [
-                buildMap(),
-                buildControl(),
-                showDirction ? buildDirction() : SizedBox(),
-              ],
-            ),
-      // floatingActionButton: FloatingActionButton(
-      //     backgroundColor: Colors.purple,
-      //     onPressed: () {
-      //       print('object');
-      //       launchURL();
-      //     },
-      //     child: Icon(Icons.download)),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      //backgroundColor: Colors.purple,
+          ? ShowProgress()
+          : haveData
+              ? showDataMap()
+              : showNodata(),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
+      ),
+    );
+  }
+
+  Stack showDataMap() {
+    return Stack(
+      children: [
+        buildMap(),
+        buildControl(),
+        showDirction ? buildDirction() : SizedBox(),
+      ],
+    );
+  }
+
+  Container showNodata() {
+    return Container(
+      child: Center(
+        child: Text(
+          'ไม่พบข้อมูล',
+          style: TextTheme().bodyText1,
+        ),
       ),
     );
   }
@@ -372,14 +336,30 @@ class _MapdmsxState extends State<Mapdmsx> {
   Widget buildControl() => Padding(
         padding: const EdgeInsets.only(top: 60),
         child: InkWell(
-          onTap: () {},
-          // => Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
-          //   ),
-          // ).then((value) => readDataApi()),
+          onTap: () {
+            return Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
+              ),
+            ).then((value) {
+              var result = value;
+              for (var item in result) {
+                Dmsxmodel dmsxmodel = item;
+                print('lat == ${dmsxmodel.lat}');
 
+                if (!((dmsxmodel.lat == '0') || (dmsxmodel.lng == '0'))) {
+                  LatLng latlng = LatLng(
+                      double.parse(dmsxmodel.lat), double.parse(dmsxmodel.lng));
+                  mapController.animateCamera(CameraUpdate.newCameraPosition(
+                      CameraPosition(target: latlng, zoom: 16)));
+                } else {
+                  Fluttertoast.showToast(msg: 'ไม่พบหมุด');
+                }
+              }
+              readDataApi();
+            });
+          },
           child: Container(
             width: 60,
             height: 70,
@@ -410,6 +390,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       mapType: MapType.normal,
       initialCameraPosition: _kGooglePlex,
       onMapCreated: (GoogleMapController controller) {
+        mapController = controller;
         _controller.complete();
       },
       onTap: (argument) {
@@ -462,15 +443,6 @@ class _MapdmsxState extends State<Mapdmsx> {
           ),
         ),
         actions: [
-          // TextButton(
-          //   onPressed: () {
-          //     // Navigator.pop(context);
-          //     // processTakePhoto(
-          //     //     dmsxmodel: dmsxmodel, source: ImageSource.camera);
-          //      Fluttertoast.showToast(msg: 'กรุณาแนบไฟล์');
-          //   },
-          //   child: Text('ถ่ายรูป'),
-          // ),
           checkAmountImagebol
               ? TextButton(
                   onPressed: () {
@@ -535,9 +507,16 @@ class _MapdmsxState extends State<Mapdmsx> {
       File file = File(re.files.single.path);
       print('@@dmsx filePath = ${file.path}');
 
+      setState(() {
+        
+      });
+
       var namePath = file.path;
       var string = namePath.split('/');
       var nameImage = string.last;
+
+      print('@@dmsx nameImage = $nameImage');
+
       nameImage = nameImage.substring(0, 4);
       nameImage = converNameImage(nameImage);
 
@@ -630,11 +609,14 @@ class _MapdmsxState extends State<Mapdmsx> {
         String nameWithoutExtension = path.basenameWithoutExtension(file.path);
         var name = nameWithoutExtension.split("_");
         var code = name[0].substring(4, name[0].length);
+
         print('dmsx name[0] = ${name[0]}');
+
+        print('30jan  dmsxdel.ca == ${dmsxmodel.ca}, ');
+
         print('dmsx code = $code');
 
-        if (code != dmsxmodel.ca && code != dmsxmodel.peaNo) {
-          //if (code != dmsxmodel.peaNo) {
+        if ((code.trim() != dmsxmodel.ca.trim()) && (code.trim() != dmsxmodel.peaNo.trim())) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -650,69 +632,105 @@ class _MapdmsxState extends State<Mapdmsx> {
           );
         } else {
           String nameFile = path.basename(file.path);
-          print('dmsx nameFile = $nameFile');
+          print('###dmsx nameFile = $nameFile');
+          print('###dmsx nameFile บน servver = ${dmsxmodel.images}');
 
-          String pathUpload =
-              'https://pea23.com/apipsinsx/saveImageCustomer.php';
+          if (dmsxmodel.images?.isEmpty ?? true) {
+            await processUploadAndEdit(file, nameFile, dmsxmodel);
+          } else {
 
-          Map<String, dynamic> map = {};
-          map['file'] =
-              await MultipartFile.fromFile(file.path, filename: nameFile);
-          FormData data = FormData.fromMap(map);
-          await Dio().post(pathUpload, data: data).then((value) async {
-            print('# === value for upload ==>> $value');
-            List<String> images = [];
-            var listStatus = <String>[];
-
-            print('@@ statusText === $statusText');
-
-            if (dmsxmodel.images.isEmpty) {
-              images.add(nameFile);
-            } else {
-              String string = dmsxmodel.images;
-              string = string.substring(1, string.length - 1);
-              images = string.split(',');
-              int index = 0;
-              for (var item in images) {
-                images[index] = item.trim();
-                index++;
-              }
-              images.add(nameFile);
-
-              String statusTextCurrent = dmsxmodel.statusTxt;
-              statusTextCurrent =
-                  statusTextCurrent.substring(1, statusTextCurrent.length - 1);
-              listStatus = statusTextCurrent.split(',');
-              int i = 0;
-              for (var item in listStatus) {
-                listStatus[i] = item.trim();
-                i++;
-              }
-              listStatus.add(statusText);
+            String string = dmsxmodel.images;
+            string = string.substring(1, string.length - 1);
+            List<String> images = string.split(',');
+            int i = 0;
+            for (var item in images) {
+              images[i] = item.trim();
+              i++;
             }
 
-            String readNumber = 'ดำเนินการแล้ว';
+            print('30jan images ===> $images');
 
-            if (dmsxmodel.readNumber.isEmpty) {
-              readNumber = 'ดำเนินการแล้ว';
-            } else {
-              readNumber = 'ต่อกลับแล้ว';
+            bool dulucapeImage = false;
+
+            for (var item in images) {
+              if (nameFile.trim() == item.trim()) {
+                dulucapeImage = true;
+              }
             }
 
-            print('@@ listStatus === $listStatus');
+            print('30jan dulucapImage === $dulucapeImage');
 
-            String apiEditImages =
-                'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
-
-            await Dio().get(apiEditImages).then((value) {
-              print('value update == $value');
-              readDataApi();
-            });
-          });
-        }
+            if (!dulucapeImage) {
+              await processUploadAndEdit(file, nameFile, dmsxmodel);
+            } else {
+              //รูปซ้ำ
+              print('รูปซ้ำ');
+              normalDialog(context, 'รูปซ้ำครับ');
+            }
+          }
+        } //end if
       },
       child: Text('อัพโหลด'),
     );
+  }
+
+  Future<void> processUploadAndEdit(
+      File file, String nameFile, Dmsxmodel dmsxmodel) async {
+    String pathUpload = 'https://pea23.com/apipsinsx/saveImageCustomer.php';
+
+    Map<String, dynamic> map = {};
+    map['file'] = await MultipartFile.fromFile(file.path, filename: nameFile);
+    FormData data = FormData.fromMap(map);
+    await Dio().post(pathUpload, data: data).then((value) async {
+      print('# === value for upload ==>> $value');
+      List<String> images = [];
+      var listStatus = <String>[];
+
+      print('@@ statusText === $statusText');
+
+      if (dmsxmodel.images.isEmpty) {
+        images.add(nameFile);
+      } else {
+        String string = dmsxmodel.images;
+        string = string.substring(1, string.length - 1);
+        images = string.split(',');
+        int index = 0;
+        for (var item in images) {
+          images[index] = item.trim();
+          index++;
+        }
+        images.add(nameFile);
+
+        String statusTextCurrent = dmsxmodel.statusTxt;
+        statusTextCurrent =
+            statusTextCurrent.substring(1, statusTextCurrent.length - 1);
+        listStatus = statusTextCurrent.split(',');
+        int i = 0;
+        for (var item in listStatus) {
+          listStatus[i] = item.trim();
+          i++;
+        }
+        listStatus.add(statusText);
+      }
+
+      String readNumber = 'ดำเนินการแล้ว';
+
+      if (dmsxmodel.readNumber.isEmpty) {
+        readNumber = 'ดำเนินการแล้ว';
+      } else {
+        readNumber = 'ต่อกลับแล้ว';
+      }
+
+      print('@@ listStatus === $listStatus');
+
+      String apiEditImages =
+          'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
+
+      await Dio().get(apiEditImages).then((value) {
+        print('value update == $value');
+        readDataApi();
+      });
+    });
   }
 
   Widget showListImages(Dmsxmodel dmsxmodel) {

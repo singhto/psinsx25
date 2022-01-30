@@ -32,43 +32,53 @@ Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String string = preferences.getString('id');
-  if (string?.isEmpty ?? true) {
+
+if (string?.isEmpty ?? true) {
     initialRount = '/signIn';
-    runApp(MyApp());
-  } else {
+  runApp(MyApp());
+} else {
+    initialRount = '/homePage';
+  runApp(MyApp());
+
+}
+
+  // if (string?.isEmpty ?? true) {
+  //   initialRount = '/signIn';
+  //   runApp(MyApp());
+  // } else {
     
-    DateTime dateTime = DateTime.now();
-    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+  //   DateTime dateTime = DateTime.now();
+  //   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 
-    var currentDate = dateFormat.format(dateTime).toString();
-    //print('@@create_by $string \n @@ currentDate == $currentDate');
+  //   var currentDate = dateFormat.format(dateTime).toString();
+  //   //print('@@create_by $string \n @@ currentDate == $currentDate');
 
-    var workTimeModels = <WorkTimeModel>[];
+  //   var workTimeModels = <WorkTimeModel>[];
 
-    String path =
-        'https://pea23.com/apipsinsx/getWorktimeWhereUser.php?isAdd=true&create_by=$string';
-    await Dio().get(path).then((value) {
-      for (var item in json.decode(value.data)) {
-        WorkTimeModel model = WorkTimeModel.fromMap(item);
-        workTimeModels.add(model);
-      }
-    });
+  //   String path =
+  //       'https://pea23.com/apipsinsx/getWorktimeWhereUser.php?isAdd=true&create_by=$string';
+  //   await Dio().get(path).then((value) {
+  //     for (var item in json.decode(value.data)) {
+  //       WorkTimeModel model = WorkTimeModel.fromMap(item);
+  //       workTimeModels.add(model);
+  //     }
+  //   });
 
-    print('lastDate ==>> ${workTimeModels[0].dat_work}');
+  //   print('lastDate ==>> ${workTimeModels[0].dat_work}');
 
-    if (currentDate == workTimeModels[0].dat_work) {
-      if (workTimeModels[0].out_work_image.isEmpty) {
-        initialRount = '/homePage';
-        runApp(MyApp());
-      } else {
-        initialRount = '/waitWork';
-        runApp(MyApp());
-      }
-    } else {
-      initialRount = '/workTime';
-      runApp(MyApp());
-    }
-  }
+  //   if (currentDate == workTimeModels[0].dat_work) {
+  //     if (workTimeModels[0].out_work_image.isEmpty) {
+  //       initialRount = '/homePage';
+  //       runApp(MyApp());
+  //     } else {
+  //       initialRount = '/waitWork';
+  //       runApp(MyApp());
+  //     }
+  //   } else {
+  //     initialRount = '/workTime';
+  //     runApp(MyApp());
+  //   }
+  // }
 }
 
 class MyApp extends StatelessWidget {
