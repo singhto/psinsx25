@@ -39,7 +39,7 @@ dependencies:
   circular_profile_avatar: ^2.0.5
   external_app_launcher: ^2.0.2
   datetime_picker_formfield: ^2.0.0
-  toast: ^0.1.5
+  toast: ^0.3.0
   geolocator: ^8.0.0
   responsive_grid: ^2.0.0
   cached_network_image: ^3.2.0
