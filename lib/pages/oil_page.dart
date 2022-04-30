@@ -119,7 +119,7 @@ class _OilPageState extends State<OilPage> {
                         String url =
                             'https://www.pea23.com/apipsinsx/deleteOutlayWhereId.php?isAdd=true&id=${outlayModel.id}';
                         await Dio().get(url).then((value) => readOutlay());
-                        showToast('ลบรายการ สำเร็จ', gravity: Toast.CENTER);
+                        showToast('ลบรายการ สำเร็จ', gravity: Toast.center);
                       },
                       child: Text('ยืนยัน'),
                     ),
@@ -134,7 +134,7 @@ class _OilPageState extends State<OilPage> {
   }
 
   void showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context, duration: duration, gravity: gravity);
+    Toast.show(msg, duration: duration, gravity: gravity);
   }
 
   Widget showListOutlay() => ListView.builder(

@@ -138,7 +138,7 @@ class _AddOutLayState extends State<AddOutLay> {
       );
 
   void showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context, duration: duration, gravity: gravity);
+    Toast.show(msg, duration: duration, gravity: gravity);
   }
 
   Widget saveButton() => Padding(
@@ -211,7 +211,7 @@ class _AddOutLayState extends State<AddOutLay> {
         String urlInsertData =
             'https://www.pea23.com/apipsinsx/addDataOutlay.php?isAdd=true&costType_id=1&supplier_name=$supplierName&supplier_address=$supplierAddress&supplier_taxid=$supplierTaxid&orderFrom_id=1&branch=$branch&user_id=$userId&details=$details&number=$number&priceUnit=$priceUnit&sum=$sum&tax=$tax&referenceNumber=$referenceNumber&image=$urlPathImage&createdAt=$createDate&outlay_status=NO&create_by=$userId&create_date=$createDate';
         await Dio().get(urlInsertData);
-        showToast('อัพโหลดสำเร็จ', gravity: Toast.CENTER);
+        showToast('อัพโหลดสำเร็จ', gravity: Toast.center);
         routeTuService();
       });
     } catch (e) {}
