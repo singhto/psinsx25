@@ -16,8 +16,6 @@ import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/my_utility.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/widgets/show_proogress.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
 
 import 'package:path/path.dart' as path;
 import 'package:psinsx/widgets/show_text.dart';
@@ -40,6 +38,9 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   bool load = true;
   Map<MarkerId, Marker> markers = {};
+  Map<MarkerId, Marker> greenMarkers = {};
+  Map<MarkerId, Marker> pubpleMarkers = {};
+  Map<MarkerId, Marker> showMarkers = {};
   LatLng startMapLatLng;
 
   String statusText;
@@ -55,9 +56,16 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   bool haveData; //true == haveData
 
+  int amountGreen = 0;
+  int amountPubple = 0;
+  bool greenStatus, pubpleStatus = false;
+
+  var groupNameImages = <String>[];
+
+  double total = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readDataApi();
   }
@@ -68,27 +76,43 @@ class _MapdmsxState extends State<Mapdmsx> {
     switch (dmsxmodel.readNumber) {
       case 'ดำเนินการแล้ว':
         hueDouble = 0;
+        greenStatus = false;
+        pubpleStatus = false;
         break;
       case 'ต่อกลับแล้ว':
         hueDouble = 60;
+        greenStatus = false;
+        pubpleStatus = false;
         break;
       default:
-        hueDouble = 120;
+        {
+          hueDouble = 120;
+          amountGreen++;
+          greenStatus = true;
+          pubpleStatus = false;
+        }
+
         break;
     }
 
     switch (dmsxmodel.statusTxt) {
       case 'ให้ต่อมิเตอร์':
         hueDouble = 300;
+        amountPubple++;
+        pubpleStatus = true;
         break;
       case 'ให้ต่อสาย':
         hueDouble = 300;
+        amountPubple++;
+        pubpleStatus = true;
         break;
       case 'ต่อสายแล้ว':
         hueDouble = 60;
+        pubpleStatus = false;
         break;
       case 'ต่อมิเตอร์แล้ว':
         hueDouble = 60;
+        pubpleStatus = false;
         break;
     }
 
@@ -120,7 +144,14 @@ class _MapdmsxState extends State<Mapdmsx> {
         ),
       ),
     );
+
     markers[markerId] = marker;
+    if (greenStatus) {
+      greenMarkers[markerId] = marker;
+    }
+    if (pubpleStatus) {
+      pubpleMarkers[markerId] = marker;
+    }
   }
 
   Future<void> readDataApi() async {
@@ -128,6 +159,11 @@ class _MapdmsxState extends State<Mapdmsx> {
 
     if (markers.isNotEmpty) {
       markers.clear();
+      greenMarkers.clear();
+      pubpleMarkers.clear();
+      amountGreen = 0;
+      amountPubple = 0;
+      total = 0;
     }
 
     await MyUtility().findUserId().then(
@@ -145,8 +181,29 @@ class _MapdmsxState extends State<Mapdmsx> {
             });
             if (value.toString() != 'null') {
               int index = 0;
+              var images = <String>[];
               for (var item in json.decode(value.data)) {
                 Dmsxmodel dmsxmodel = Dmsxmodel.fromMap(item);
+
+                // print(
+                //     '####30April dmsxmodel.mimag ====>>> ${dmsxmodel.images}');
+
+                String string = dmsxmodel.images;
+                if (string.isNotEmpty) {
+                  string = string.substring(1, string.length - 1);
+
+                  if (string.contains(',')) {
+                    var result = string.split(',');
+                    for (var i = 0; i < result.length; i++) {
+                      images.add(result[i].trim());
+                    }
+                  } else {
+                    images.add(string.trim());
+                  }
+                }
+
+                ///if
+
                 dmsxModels.add(dmsxmodel);
                 print('#id == ${dmsxmodel.id}');
 
@@ -159,6 +216,62 @@ class _MapdmsxState extends State<Mapdmsx> {
                 );
                 index++;
               }
+
+              var groupForDigi = <String>[];
+
+              print('####30April images ===>>> $images');
+
+              Map<String, double> map = {};
+
+              for (var item in images) {
+                String string = item.substring(0, 4);
+                //print('###30April string $string');
+
+                if (map.isEmpty) {
+                  map[string] = 1.0;
+                } else {
+                  if (map[string] == null) {
+                    map[string] = 1.0;
+                  } else {
+                    map[string] = map[string] + 1.0;
+                  }
+                }
+
+                if (groupForDigi.isEmpty) {
+                  groupForDigi.add(string);
+                } else {
+                  bool status = true;
+                  for (var item2 in groupForDigi) {
+                    if (string == item2) {
+                      status = false;
+                    }
+                  }
+                  if (status) {
+                    groupForDigi.add(string);
+                  }
+                }
+              }
+
+              print('###30April  groubFourDigi ==>> $groupForDigi');
+              print('###30April  map ==>> $map');
+
+              Map<String, double> mapPrices = {};
+              mapPrices['WMMI'] = 35.0;
+              mapPrices['WMMR'] = 35.0;
+              mapPrices['FUCN'] = 20.0;
+              mapPrices['FURM'] = 20.0;
+              mapPrices['WMST'] = 10.0;
+              mapPrices['WMS2'] = 10.0;
+
+              for (var item4 in groupForDigi) {
+                total = total + (map[item4] * mapPrices[item4]);
+              }
+
+              print('###30April total ==>>> $total');
+
+              // other
+              showMarkers = markers;
+              setState(() {});
             } else {
               setState(() {
                 haveData = false;
@@ -188,9 +301,124 @@ class _MapdmsxState extends State<Mapdmsx> {
     return Stack(
       children: [
         buildMap(),
+        buildMoney(),
         buildControl(),
+        buildControlGreen(),
+        buildControlPubple(),
+        Positioned(
+          top: 320,
+          child: InkWell(
+            onTap: (() => newSearch()),
+            child: Card(
+              color: Colors.black.withOpacity(0.5),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Icon(Icons.search),
+                    Text(
+                      'ค้นหา',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
         showDirction ? buildDirction() : SizedBox(),
       ],
+    );
+  }
+
+  Positioned buildMoney() {
+    return Positioned(
+      top: 10,
+      child: Card(
+        color: Colors.black.withOpacity(0.5),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('$total'),
+        ),
+      ),
+    );
+  }
+
+  Positioned buildControlGreen() {
+    return Positioned(
+      top: 140,
+      child: Container(
+        constraints: BoxConstraints(minWidth: 60),
+        height: 70,
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              showMarkers = greenMarkers;
+            });
+          },
+          child: Card(
+            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.pin_drop),
+                    Text(
+                      amountGreen.toString(),
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    Text(
+                      'รอดำเนินการ',
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned buildControlPubple() {
+    return Positioned(
+      top: 220,
+      child: Container(
+        constraints: BoxConstraints(minWidth: 60),
+        height: 70,
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              showMarkers = pubpleMarkers;
+            });
+          },
+          child: Card(
+            color: Color.fromARGB(255, 190, 6, 144).withOpacity(0.5),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.pin_drop),
+                    Text(
+                      amountPubple.toString(),
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    Text(
+                      'ต่อกลับ',
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -230,7 +458,9 @@ class _MapdmsxState extends State<Mapdmsx> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ShowText(text: 'PEA: ${dmsxModels[indexDirection].peaNo}'),
-                    ShowText(text: 'สถานะล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
+                    ShowText(
+                        text:
+                            'สถานะล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
                   ],
                 ),
                 Row(
@@ -328,48 +558,33 @@ class _MapdmsxState extends State<Mapdmsx> {
     }
   }
 
-  Widget buildControl() => Padding(
-        padding: const EdgeInsets.only(top: 60),
+  Widget buildControl() => Positioned(
+        top: 60,
         child: InkWell(
           onTap: () {
-            return Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
-              ),
-            ).then((value) {
-              var result = value;
-              for (var item in result) {
-                Dmsxmodel dmsxmodel = item;
-                print('lat == ${dmsxmodel.lat}');
-
-                if (!((dmsxmodel.lat == '0') || (dmsxmodel.lng == '0'))) {
-                  LatLng latlng = LatLng(
-                      double.parse(dmsxmodel.lat), double.parse(dmsxmodel.lng));
-                  mapController.animateCamera(CameraUpdate.newCameraPosition(
-                      CameraPosition(target: latlng, zoom: 16)));
-                } else {
-                  Fluttertoast.showToast(msg: 'ไม่พบหมุด');
-                }
-              }
-              readDataApi();
+            setState(() {
+              showMarkers = markers;
             });
           },
           child: Container(
             width: 60,
             height: 70,
             child: Card(
-              color: Colors.purple.withOpacity(0.5),
+              color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.list_alt),
+                      Icon(Icons.search),
                       Text(
                         markers.length.toString(),
                         style: TextStyle(fontSize: 10),
+                      ),
+                      Text(
+                        'ค้นหา',
+                        style: TextStyle(fontSize: 8),
                       ),
                     ],
                   ),
@@ -379,6 +594,31 @@ class _MapdmsxState extends State<Mapdmsx> {
           ),
         ),
       );
+
+  void newSearch() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DmsxListPage(dmsxModels: dmsxModels),
+      ),
+    ).then((value) {
+      var result = value;
+      for (var item in result) {
+        Dmsxmodel dmsxmodel = item;
+        print('lat == ${dmsxmodel.lat}');
+
+        if (!((dmsxmodel.lat == '0') || (dmsxmodel.lng == '0'))) {
+          LatLng latlng =
+              LatLng(double.parse(dmsxmodel.lat), double.parse(dmsxmodel.lng));
+          mapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: latlng, zoom: 16)));
+        } else {
+          Fluttertoast.showToast(msg: 'ไม่พบหมุด');
+        }
+      }
+      readDataApi();
+    });
+  }
 
   GoogleMap buildMap() {
     return GoogleMap(
@@ -395,7 +635,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       },
       myLocationButtonEnabled: true,
       myLocationEnabled: true,
-      markers: Set<Marker>.of(markers.values),
+      markers: Set<Marker>.of(showMarkers.values),
     );
   }
 
@@ -811,9 +1051,9 @@ class _MapdmsxState extends State<Mapdmsx> {
 }
 
 // ASGD = เริ่มงดจ่ายไฟ
-// WMMI = ต่อมิเตอร์แล้ว
-// WMMR = ถอดมิเตอร์แล้ว
-// FUCN = ต่อสายแล้ว
-// FURM = ปลดสายแล้ว
-// WMST = ผ่อนผันครั้งที่ 1
-// WMS2 = ผ่อนผันครั้งที่ 2
+// WMMI = ต่อมิเตอร์แล้ว  * 35
+// WMMR = ถอดมิเตอร์แล้ว * 35
+// FUCN = ต่อสายแล้ว * 20
+// FURM = ปลดสายแล้ว * 20
+// WMST = ผ่อนผันครั้งที่ 1 * 10
+// WMS2 = ผ่อนผันครั้งที่ 2 * 10
