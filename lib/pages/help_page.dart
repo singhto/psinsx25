@@ -38,7 +38,7 @@ if (_youtubeUrl != null && _youtubeUrl.isNotEmpty) {
 }
 
   Future<Null> readHelpData() async {
-    String url = 'https://pea23.com/apipsinsx/getDataManual.php';
+    String url = 'https://www.pea23.com/apipsinsx/getDataManual.php';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;

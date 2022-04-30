@@ -140,32 +140,32 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                   launchURL();
                 }),
-            ListTile(
-                leading: Icon(Icons.money),
-                title: Text('เบิกล่วงหน้า'),
-                subtitle: Text(
-                  'ระบบเบิกล่วงหน้า',
-                  style: TextStyle(fontSize: 10),
-                ),
-                trailing: Icon(Icons.arrow_right),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => PerPay()));
-                }),
-            ListTile(
-                leading: Icon(Icons.money),
-                title: Text('เบิกน้ำมัน'),
-                subtitle: Text(
-                  'ระบบเบิกค่าน้ำมัน',
-                  style: TextStyle(fontSize: 10),
-                ),
-                trailing: Icon(Icons.arrow_right),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => OilPage()));
-                }),
+            // ListTile(
+            //     leading: Icon(Icons.money),
+            //     title: Text('เบิกล่วงหน้า'),
+            //     subtitle: Text(
+            //       'ระบบเบิกล่วงหน้า',
+            //       style: TextStyle(fontSize: 10),
+            //     ),
+            //     trailing: Icon(Icons.arrow_right),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.of(context)
+            //           .push(MaterialPageRoute(builder: (context) => PerPay()));
+            //     }),
+            // ListTile(
+            //     leading: Icon(Icons.money),
+            //     title: Text('เบิกน้ำมัน'),
+            //     subtitle: Text(
+            //       'ระบบเบิกค่าน้ำมัน',
+            //       style: TextStyle(fontSize: 10),
+            //     ),
+            //     trailing: Icon(Icons.arrow_right),
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       Navigator.of(context)
+            //           .push(MaterialPageRoute(builder: (context) => OilPage()));
+            //     }),
             ListTile(
                 leading: Icon(Icons.help),
                 title: Text('ช่วยเหลือ'),
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('Version 1.39'),
               subtitle: Text(
-                'อัพเดทเมื่อ 30 ธันวาคม 2565',
+                'อัพเดทเมื่อ 5 กุมภาพันธ์ 2565',
                 style: TextStyle(fontSize: 10),
               ),
             ),

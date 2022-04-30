@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MyConstant {
-  String domain = 'https://pea23.com';
+  String domain = 'https://www.pea23.com';
 
   static String valueInvoiceStatus = 'ดำเนินการเสร็จสมบูรณ์';
 
-  static String domainImage = 'https://pea23.com/apipsinsx/dmsxupload/';
+  static String domainImage = 'https://www.pea23.com/apipsinsx/dmsxupload/';
 
   static List<String> typeOils = [
     'เบนซิน91', 'เบนซิน95' , 'ดีเซล'

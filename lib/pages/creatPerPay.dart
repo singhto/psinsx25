@@ -99,7 +99,7 @@ class _CreatPerPayState extends State<CreatPerPay> {
          SharedPreferences preferences = await SharedPreferences.getInstance();
           String rfUserId = preferences.getString('id');
 
-        String url = 'https://pea23.com/apipsinsx/addDataPerPay.php?isAdd=true&ref_user_id=$rfUserId&prepay_type=$prePayType&prepay_amount=$prePayAmount&prepay_status=รออนุมัติ';
+        String url = 'https://www.pea23.com/apipsinsx/addDataPerPay.php?isAdd=true&ref_user_id=$rfUserId&prepay_type=$prePayType&prepay_amount=$prePayAmount&prepay_status=รออนุมัติ';
         try {
           Response response = await Dio().get(url);
           print('response = $response');

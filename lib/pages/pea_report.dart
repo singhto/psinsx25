@@ -48,7 +48,7 @@ class _PeaReportState extends State<PeaReport> {
     String userId = preferences.getString('id');
 
     String url =
-        'https://pea23.com/apipsinsx/getImageSuccess.php?isAdd=true&user_id=$userId';
+        'https://www.pea23.com/apipsinsx/getImageSuccess.php?isAdd=true&user_id=$userId';
 
 
         print('url $url');

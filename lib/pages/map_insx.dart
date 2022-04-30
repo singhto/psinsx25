@@ -96,7 +96,7 @@ class _MapInsxState extends State<MapInsx> {
     String workername = preferences.getString('staffname');
 
     String url =
-        'https://pea23.com/apipsinsx/getInsxWhereUser.php?isAdd=true&worker_name=$workername';
+        'https://www.pea23.com/apipsinsx/getInsxWhereUser.php?isAdd=true&worker_name=$workername';
 
     await Dio().get(url).then((value) {
       for (var item in json.decode(value.data)) {

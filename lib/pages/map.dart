@@ -141,7 +141,7 @@ class _MyMapState extends State<MyMap> {
     String workername = preferences.getString('staffname');
 
     String url =
-        'https://pea23.com/apipsinsx/getInsxWhereUser.php?isAdd=true&worker_name=$workername';
+        'https://www.pea23.com/apipsinsx/getInsxWhereUser.php?isAdd=true&worker_name=$workername';
 
     await Dio().get(url).then((value) async {
       if (value.toString() != 'null') {
@@ -403,7 +403,7 @@ class _MyMapState extends State<MyMap> {
 
   Future<Null> editDataInsx2(InsxModel2 insxModel2) async {
     String url =
-        'https://pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}';
+        'https://www.pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}';
 
     print('==== url edittttt>>>> $url');
 

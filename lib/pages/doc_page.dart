@@ -56,7 +56,7 @@ class _DocPageState extends State<DocPage> {
     //print('staffName === $stafName');
 
     String url =
-        'https://pea23.com/apipsinsx/getDocWhereUserSuccess.php?isAdd=true&user_id=$userId';
+        'https://www.pea23.com/apipsinsx/getDocWhereUserSuccess.php?isAdd=true&user_id=$userId';
 
     print('url ====>>> $url');
     await Dio().get(url).then((value) {

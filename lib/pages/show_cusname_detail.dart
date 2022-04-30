@@ -347,7 +347,7 @@ class _ShowCusnameDetailState extends State<ShowCusnameDetail> {
 
         print('# nameFIle = $nameFile');
 
-        String pathUpload = 'https://pea23.com/apipsinsx/saveImageCustomer.php';
+        String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
 
         Map<String, dynamic> map = {};
         map['file'] =

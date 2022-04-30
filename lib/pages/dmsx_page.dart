@@ -36,7 +36,7 @@ class _DmsxPageState extends State<DmsxPage> {
     print('id ===== $userId');
 
     String url =
-        'https://pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$userId';
+        'https://www.pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$userId';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;

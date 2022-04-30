@@ -39,7 +39,7 @@ class _PerPayState extends State<PerPay> {
     print('userId= $userId');
 
     String url =
-        'https://pea23.com/apipsinsx/getDataPerPay.php?isAdd=true&ref_user_id=$userId';
+        'https://www.pea23.com/apipsinsx/getDataPerPay.php?isAdd=true&ref_user_id=$userId';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;

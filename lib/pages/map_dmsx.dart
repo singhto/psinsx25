@@ -136,7 +136,7 @@ class _MapdmsxState extends State<Mapdmsx> {
           dmsxModels.clear();
         }
         String path =
-            'https://pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
+            'https://www.pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
 
         await Dio().get(path).then(
           (value) {
@@ -669,7 +669,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   Future<void> processUploadAndEdit(
       File file, String nameFile, Dmsxmodel dmsxmodel) async {
-    String pathUpload = 'https://pea23.com/apipsinsx/saveImageCustomer.php';
+    String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
 
     Map<String, dynamic> map = {};
     map['file'] = await MultipartFile.fromFile(file.path, filename: nameFile);
@@ -717,7 +717,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       print('@@ listStatus === $listStatus');
 
       String apiEditImages =
-          'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
+          'https://www.pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
 
       await Dio().get(apiEditImages).then((value) {
         print('value update == $value');
