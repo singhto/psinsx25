@@ -388,7 +388,9 @@ class _MapdmsxState extends State<Mapdmsx> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DetaliMoney(dmsxModels: dmsxModels,),
+                builder: (context) => DetaliMoney(
+                  dmsxModels: dmsxModels,
+                ),
               ),
             );
           },
@@ -398,11 +400,8 @@ class _MapdmsxState extends State<Mapdmsx> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text(
-                    'คะแนน',
-                    style: TextStyle(fontSize: 8),
-                  ),
                   Text('$total'),
+                  Text('รายได้', style: TextStyle(fontSize: 8)),
                 ],
               ),
             ),
@@ -1142,3 +1141,5 @@ class _MapdmsxState extends State<Mapdmsx> {
 // FURM = ปลดสายแล้ว * 20
 // WMST = ผ่อนผันครั้งที่ 1 * 10
 // WMS2 = ผ่อนผันครั้งที่ 2 * 10
+
+// ( FURM + FUCN + WMMR + WMST + WMS2 ) - (WMST + WMS2) 
