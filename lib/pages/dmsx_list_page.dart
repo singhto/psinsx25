@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:psinsx/models/dmsx_model.dart';
-import 'package:psinsx/pages/show_cusname_detail.dart';
+import 'package:psinsx/utility/my_calculate.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/widgets/show_proogress.dart';
 import 'package:psinsx/widgets/show_tetle.dart';
@@ -127,21 +128,21 @@ class _DmsxListPageState extends State<DmsxListPage> {
                           ),
                         ],
                       ),
-                       Row(
-                         children: [
-                           ShowTitle(
-                            title: 'PEA:',
-                            textStyle: MyConstant().h4Style(),
-                      ),
-                      ShowTitle(
-                            title: searchDmsxModels[index].peaNo.trim(),
-                            textStyle: MyConstant().h4Style(),
-                      ),
-                         ],
-                       ),
                       Row(
                         children: [
-                            ShowTitle(
+                          ShowTitle(
+                            title: 'PEA:',
+                            textStyle: MyConstant().h4Style(),
+                          ),
+                          ShowTitle(
+                            title: searchDmsxModels[index].peaNo.trim(),
+                            textStyle: MyConstant().h4Style(),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          ShowTitle(
                             title: 'พิกัด:',
                             textStyle: MyConstant().h5Style(),
                           ),
@@ -149,12 +150,28 @@ class _DmsxListPageState extends State<DmsxListPage> {
                             title: searchDmsxModels[index].lat.trim(),
                             textStyle: MyConstant().h5Style(),
                           ),
-                          Text(', ',style: TextStyle(fontSize: 12),),
+                          Text(
+                            ', ',
+                            style: TextStyle(fontSize: 12),
+                          ),
                           ShowTitle(
                             title: searchDmsxModels[index].lng.trim(),
                             textStyle: MyConstant().h5Style(),
                           ),
                         ],
+                      ),
+                      ShowTitle(
+                        title: newShowDate(
+                            header: 'วันแจ้งดำเนินการ : ',
+                            dateTimeStr: dmsxModels[index].refnoti_date),
+                        textStyle: MyConstant().h5Style(),
+                      ),
+                      ShowTitle(
+                        title: MyCalculate().canculateDifferance(
+                          statusDate: dmsxModels[index].dataStatus,
+                          refNotification: dmsxModels[index].refnoti_date,
+                        ),
+                        textStyle: MyConstant().h5Style(),
                       ),
                     ],
                   ),
@@ -182,8 +199,8 @@ class _DmsxListPageState extends State<DmsxListPage> {
       widgets.add(
         Container(
           margin: EdgeInsets.symmetric(horizontal: 4),
-          width: 60,
-          height: 60,
+          width: 40,
+          height: 40,
           child: CachedNetworkImage(
             imageUrl: '${MyConstant.domainImage}${item.trim()}',
             fit: BoxFit.cover,
@@ -198,6 +215,23 @@ class _DmsxListPageState extends State<DmsxListPage> {
       children: widgets,
     );
   }
+
+  String newShowDate({@required String header, @required String dateTimeStr}) {
+    String result;
+
+    var strings = dateTimeStr.split('-');
+    int year = int.parse(strings[0]);
+    int month = int.parse(strings[1]);
+    int day = int.parse(strings[2]);
+
+    DateTime datetime = DateTime(year, month, day);
+    DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+    result = dateFormat.format(datetime);
+    result = '$header , $result';
+
+    return result;
+  }
+
 }
 
 class Debouncer {

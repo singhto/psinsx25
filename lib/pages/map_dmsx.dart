@@ -10,7 +10,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:psinsx/models/dmsx_model.dart';
+import 'package:psinsx/pages/detail_money.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
+import 'package:psinsx/utility/my_calculate.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/my_utility.dart';
@@ -18,6 +20,7 @@ import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/widgets/show_proogress.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:psinsx/widgets/show_tetle.dart';
 import 'package:psinsx/widgets/show_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -174,7 +177,7 @@ class _MapdmsxState extends State<Mapdmsx> {
         String path =
             'https://www.pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
 
-            print('###1may path ==>>> $path');
+        print('###1may path ==>>> $path');
 
         await Dio().get(path).then(
           (value) {
@@ -187,8 +190,8 @@ class _MapdmsxState extends State<Mapdmsx> {
               for (var item in json.decode(value.data)) {
                 Dmsxmodel dmsxmodel = Dmsxmodel.fromMap(item);
 
-                // print(
-                //     '####30April dmsxmodel.mimag ====>>> ${dmsxmodel.images}');
+                print(
+                    '###1may dmsxmodel.status,  ====>>> ${dmsxmodel.dataStatus} ${dmsxmodel.refnoti_date}');
 
                 String string = dmsxmodel.images;
                 if (string.isNotEmpty) {
@@ -307,20 +310,60 @@ class _MapdmsxState extends State<Mapdmsx> {
         buildControl(),
         buildControlGreen(),
         buildControlPubple(),
-        Positioned(
-          top: 320,
-          child: InkWell(
-            onTap: (() => newSearch()),
-            child: Card(
-              color: Colors.black.withOpacity(0.5),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
+        buildSearchButton(),
+        showDirction ? buildDirction() : SizedBox(),
+      ],
+    );
+  }
+
+  // Positioned buildSearchButton() {
+  //   return Positioned(
+  //     top: 10,
+  //     child: InkWell(
+  //       onTap: (() => newSearch()),
+  //       child: Card(
+  //         color: Colors.black.withOpacity(0.5),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Column(
+  //             children: [
+  //               Icon(Icons.search),
+  //               Text(
+  //                 'ค้นหา',
+  //                 style: TextStyle(fontSize: 10),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Positioned buildSearchButton() {
+    return Positioned(
+      top: 10,
+      child: Container(
+        constraints: BoxConstraints(minWidth: 60),
+        height: 70,
+        child: InkWell(
+          onTap: () => newSearch(),
+          child: Card(
+            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Center(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.search),
+                    // Text(
+                    //   amountGreen.toString(),
+                    //   style: TextStyle(fontSize: 10),
+                    // ),
                     Text(
                       'ค้นหา',
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 8),
                     ),
                   ],
                 ),
@@ -328,19 +371,42 @@ class _MapdmsxState extends State<Mapdmsx> {
             ),
           ),
         ),
-        showDirction ? buildDirction() : SizedBox(),
-      ],
+      ),
     );
   }
 
   Positioned buildMoney() {
     return Positioned(
       top: 10,
-      child: Card(
-        color: Colors.black.withOpacity(0.5),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('$total'),
+      left: 60,
+      child: Container(
+        constraints: BoxConstraints(minWidth: 60),
+        height: 70,
+        child: InkWell(
+          onTap: () {
+            //print('click builMoney');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetaliMoney(dmsxModels: dmsxModels,),
+              ),
+            );
+          },
+          child: Card(
+            color: Colors.black.withOpacity(0.5),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    'คะแนน',
+                    style: TextStyle(fontSize: 8),
+                  ),
+                  Text('$total'),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -348,7 +414,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   Positioned buildControlGreen() {
     return Positioned(
-      top: 140,
+      top: 150,
       child: Container(
         constraints: BoxConstraints(minWidth: 60),
         height: 70,
@@ -366,7 +432,10 @@ class _MapdmsxState extends State<Mapdmsx> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.pin_drop),
+                    Icon(
+                      Icons.pin_drop,
+                      color: Colors.green,
+                    ),
                     Text(
                       amountGreen.toString(),
                       style: TextStyle(fontSize: 10),
@@ -398,14 +467,17 @@ class _MapdmsxState extends State<Mapdmsx> {
             });
           },
           child: Card(
-            color: Color.fromARGB(255, 190, 6, 144).withOpacity(0.5),
+            color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.pin_drop),
+                    Icon(
+                      Icons.pin_drop,
+                      color: Colors.purple,
+                    ),
                     Text(
                       amountPubple.toString(),
                       style: TextStyle(fontSize: 10),
@@ -462,13 +534,24 @@ class _MapdmsxState extends State<Mapdmsx> {
                     ShowText(text: 'PEA: ${dmsxModels[indexDirection].peaNo}'),
                     ShowText(
                         text:
-                            'สถานะล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
+                            'ล่าสุด: ${dmsxModels[indexDirection].statusTxt}'),
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ShowText(text: 'ชื่อ:'),
-                    ShowText(text: dmsxModels[indexDirection].cusName),
+                    Row(
+                      children: [
+                        ShowText(text: 'ชื่อ:'),
+                        ShowText(text: dmsxModels[indexDirection].cusName),
+                      ],
+                    ),
+                    ShowTitle(
+                      title: MyCalculate().canculateDifferance(
+                          statusDate: dmsxModels[indexDirection].dataStatus,
+                          refNotification:
+                              dmsxModels[indexDirection].refnoti_date),
+                    ),
                   ],
                 ),
                 ShowText(text: dmsxModels[indexDirection].address),
@@ -561,7 +644,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Widget buildControl() => Positioned(
-        top: 60,
+        top: 80,
         child: InkWell(
           onTap: () {
             setState(() {
@@ -579,13 +662,13 @@ class _MapdmsxState extends State<Mapdmsx> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.search),
+                      Icon(Icons.remove_red_eye),
                       Text(
                         markers.length.toString(),
                         style: TextStyle(fontSize: 10),
                       ),
                       Text(
-                        'ค้นหา',
+                        'ทั้งหมด',
                         style: TextStyle(fontSize: 8),
                       ),
                     ],

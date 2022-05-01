@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class Dmsxmodel {
@@ -24,6 +26,7 @@ class Dmsxmodel {
   final String lng;
   final String paymentDate;
   final String dataStatus;
+  final String refnoti_date;
   final String timestamp;
   final String userId;
   final String importDate;
@@ -51,6 +54,7 @@ class Dmsxmodel {
     this.lng,
     this.paymentDate,
     this.dataStatus,
+    this.refnoti_date,
     this.timestamp,
     this.userId,
     this.importDate,
@@ -82,6 +86,7 @@ class Dmsxmodel {
       'lng': lng,
       'paymentDate': paymentDate,
       'dataStatus': dataStatus,
+      'refnoti_date': refnoti_date,
       'timestamp': timestamp,
       'userId': userId,
       'importDate': importDate,
@@ -90,32 +95,33 @@ class Dmsxmodel {
 
   factory Dmsxmodel.fromMap(Map<String, dynamic> map) {
     return Dmsxmodel(
-      id: map['id'],
-      ca: map['ca'],
-      docID: map['docID'],
-      notice: map['notice'],
-      employeeId: map['employeeId'],
-      employeeName: map['employeeName'],
-      peaNo: map['pea_no'],
-      cusName: map['cus_name'],
-      line: map['line'],
-      status: map['status'],
-      statusTxt: map['status_txt'],
-      type: map['type'],
-      typeTxt: map['type_txt'],
-      tel: map['tel'],
-      address: map['address'],
-      invoice: map['invoice'],
-      arrears: map['arrears'],
-      images: map['images'] == null ? '' : map['images'],
-      readNumber: map['readNumber'] == null ? '' : map['readNumber'],
-      lat: map['lat'],
-      lng: map['lng'],
-      paymentDate: map['paymentDate'] == null ? '': map['paymentDate'],
-      dataStatus: map['dataStatus'],
-      timestamp: map['timestamp'],
-      userId: map['user_id'],
-      importDate: map['import_date'],
+      id: map['id'] ?? '',
+      ca: map['ca'] ?? '',
+      docID: map['docID'] ?? '',
+      notice: map['notice'] ?? '',
+      employeeId: map['employeeId'] ?? '',
+      employeeName: map['employeeName'] ?? '',
+      peaNo: map['pea_no'] ?? '',
+      cusName: map['cus_name'] ?? '',
+      line: map['line'] ?? '',
+      status: map['status'] ?? '',
+      statusTxt: map['status_txt'] ?? '',
+      type: map['type'] ?? '',
+      typeTxt: map['type_txt'] ?? '',
+      tel: map['tel'] ?? '',
+      address: map['address'] ?? '',
+      invoice: map['invoice'] ?? '',
+      arrears: map['arrears'] ?? '',
+      images: map['images'] ?? '',
+      readNumber: map['readNumber'] ?? '',
+      lat: map['lat'] ?? '',
+      lng: map['lng'] ?? '',
+      paymentDate: map['paymentDate'] ?? '',
+      dataStatus: map['dataStatus'] ?? '',
+      refnoti_date: map['refnoti_date'] ?? '',
+      timestamp: map['timestamp'] ?? '',
+      userId: map['user_id'] ?? '',
+      importDate: map['import_date'] ?? '',
     );
   }
 
