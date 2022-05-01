@@ -174,6 +174,8 @@ class _MapdmsxState extends State<Mapdmsx> {
         String path =
             'https://www.pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
 
+            print('###1may path ==>>> $path');
+
         await Dio().get(path).then(
           (value) {
             setState(() {
