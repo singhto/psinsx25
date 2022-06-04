@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Null> launchURL() async {
-    final url = 'https://www.pea23.com';
+    final url = 'https://www.pea23.com/load_work_by_user.php';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);
@@ -127,45 +127,6 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => InformationUser()));
                 }),
-            ListTile(
-                leading: Icon(Icons.download_rounded),
-                title: Text('ดึงข้อมูล'),
-                subtitle: Text(
-                  'เปิดเว็ปไซต์บริษัท,แหล่งข้อมูล',
-                  style: TextStyle(fontSize: 10),
-                ),
-                trailing: Icon(Icons.arrow_right),
-                onTap: () {
-                  print('object');
-                  Navigator.pop(context);
-                  launchURL();
-                }),
-            // ListTile(
-            //     leading: Icon(Icons.money),
-            //     title: Text('เบิกล่วงหน้า'),
-            //     subtitle: Text(
-            //       'ระบบเบิกล่วงหน้า',
-            //       style: TextStyle(fontSize: 10),
-            //     ),
-            //     trailing: Icon(Icons.arrow_right),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.of(context)
-            //           .push(MaterialPageRoute(builder: (context) => PerPay()));
-            //     }),
-            // ListTile(
-            //     leading: Icon(Icons.money),
-            //     title: Text('เบิกน้ำมัน'),
-            //     subtitle: Text(
-            //       'ระบบเบิกค่าน้ำมัน',
-            //       style: TextStyle(fontSize: 10),
-            //     ),
-            //     trailing: Icon(Icons.arrow_right),
-            //     onTap: () {
-            //       Navigator.pop(context);
-            //       Navigator.of(context)
-            //           .push(MaterialPageRoute(builder: (context) => OilPage()));
-            //     }),
             ListTile(
                 leading: Icon(Icons.help),
                 title: Text('ช่วยเหลือ'),

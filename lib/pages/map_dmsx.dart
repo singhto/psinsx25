@@ -400,9 +400,8 @@ class _MapdmsxState extends State<Mapdmsx> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                    Text('รายได้', style: TextStyle(fontSize: 8)),
+                  Text('รายได้', style: TextStyle(fontSize: 8)),
                   Text('$total ฿'),
-                
                 ],
               ),
             ),
@@ -499,12 +498,34 @@ class _MapdmsxState extends State<Mapdmsx> {
   Container showNodata() {
     return Container(
       child: Center(
-        child: Text(
-          'ไม่พบข้อมูล',
-          style: TextTheme().bodyText1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'ไม่พบข้อมูลครับ',
+              style: TextStyle(fontSize: 26.0),
+            ),
+            TextButton(
+                onPressed: () {
+                 
+                  launchURLloadWork();
+                },
+                child: Text('กด ดึงข้อมูลงานงดจ่ายไฟ'))
+          ],
         ),
       ),
     );
+  }
+
+  Future<Null> launchURLloadWork() async {
+    final url = 'https://www.pea23.com/load_work_dmsx_by_user.php';
+    await launch(url);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Unable to open URL $url');
+      // throw 'Could not launch $url';
+    }
   }
 
   Column buildDirction() {
