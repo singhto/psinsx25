@@ -12,7 +12,7 @@ class MyCalculate {
     int dayStatus = int.parse(stringsStatus[2]);
     DateTime statusDateTime = DateTime(yearStatus, monthStatus, dayStatus);
 
-      var stringsrefNoti = refNotification.split('-');
+    var stringsrefNoti = refNotification.split('-');
     int yearRef = int.parse(stringsrefNoti[0]);
     int monthRef = int.parse(stringsrefNoti[1]);
     int dayRef = int.parse(stringsrefNoti[2]);

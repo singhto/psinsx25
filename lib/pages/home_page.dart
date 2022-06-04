@@ -194,9 +194,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Divider(),
             ListTile(
-              title: Text('Version 1.39'),
+              title: Text('Version 1.41'),
               subtitle: Text(
-                'อัพเดทเมื่อ 5 กุมภาพันธ์ 2565',
+                'อัพเดทเมื่อ 19 พฤษภาคม 2565',
                 style: TextStyle(fontSize: 10),
               ),
             ),

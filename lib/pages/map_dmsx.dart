@@ -306,7 +306,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     return Stack(
       children: [
         buildMap(),
-        buildMoney(),
+        // buildMoney(),
         buildControl(),
         buildControlGreen(),
         buildControlPubple(),
@@ -384,15 +384,15 @@ class _MapdmsxState extends State<Mapdmsx> {
         height: 70,
         child: InkWell(
           onTap: () {
-            //print('click builMoney');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetaliMoney(
-                  dmsxModels: dmsxModels,
-                ),
-              ),
-            );
+            // print('click builMoney');
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => DetaliMoney(
+            //       dmsxModels: dmsxModels,
+            //     ),
+            //   ),
+            // );
           },
           child: Card(
             color: Colors.black.withOpacity(0.5),
@@ -400,8 +400,9 @@ class _MapdmsxState extends State<Mapdmsx> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  Text('$total'),
-                  Text('รายได้', style: TextStyle(fontSize: 8)),
+                    Text('รายได้', style: TextStyle(fontSize: 8)),
+                  Text('$total ฿'),
+                
                 ],
               ),
             ),

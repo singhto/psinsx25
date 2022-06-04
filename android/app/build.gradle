@@ -43,8 +43,8 @@ def keystoreProperties = new Properties()
         applicationId "pea23.com.psinsx"
         minSdkVersion 20
         targetSdkVersion 30
-        versionCode 39
-        versionName "1.39"
+        versionCode 41
+        versionName "1.41"
     }
 
        signingConfigs {
