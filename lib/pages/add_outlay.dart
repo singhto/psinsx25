@@ -48,9 +48,7 @@ class _AddOutLayState extends State<AddOutLay> {
     super.initState();
     subModel = widget.subModel;
 
-    for (var item in typeOiles) {
-      
-    }
+    for (var item in typeOiles) {}
   }
 
   @override
@@ -145,8 +143,10 @@ class _AddOutLayState extends State<AddOutLay> {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          child: RaisedButton(
-            color: Colors.red[900],
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red[900],
+            ),
             onPressed: () {
               if (file == null) {
                 normalDialog(context, 'กรุณาเลือรูปภาพก่อน');
@@ -249,7 +249,7 @@ class _AddOutLayState extends State<AddOutLay> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  OutlineButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -260,7 +260,7 @@ class _AddOutLayState extends State<AddOutLay> {
                       ),
                     ),
                   ),
-                  OutlineButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                       //editDataInsx(insxModel2);

@@ -6,18 +6,22 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:psinsx/models/insx_model.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
 import 'package:psinsx/pages/insx_edit2.dart';
-
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
 
 class InsxPage extends StatefulWidget {
-  InsxPage({Key key}) : super(key: key);
+  final List<InsxModel2> insxModel2s;
+  InsxPage({
+    Key key,
+    @required this.insxModel2s,
+  }) : super(key: key);
 
   @override
   _InsxPageState createState() => _InsxPageState();
@@ -27,8 +31,9 @@ class _InsxPageState extends State<InsxPage> {
   bool loadStatus = true; //โหลด
   bool status = true; //มีข้อมูล
   List<InsxModel> insxModels = List();
-  List<InsxSQLiteModel> insxModel2s = [];
-  List<InsxSQLiteModel> filterInsxModel2s = [];
+  List<InsxModel2> insxModel2s = [];
+  var insxModels2trues = <InsxModel2>[];
+  List<InsxModel2> filterInsxModel2s = [];
   List<Color> colorIcons = List();
   List<File> files = List();
   String urlImage, search;
@@ -37,7 +42,9 @@ class _InsxPageState extends State<InsxPage> {
   @override
   void initState() {
     super.initState();
+    insxModel2s = widget.insxModel2s;
     readInsx();
+    print('##4june ขนาด insxModel2s ${insxModel2s.length}');
   }
 
   void setToOrigin() {
@@ -50,42 +57,31 @@ class _InsxPageState extends State<InsxPage> {
   }
 
   Future<Null> readInsx() async {
-    if (insxModel2s.length != 0) {
-      setToOrigin();
+    // if (insxModel2s.isNotEmpty) {
+    //   setToOrigin();
+    // }
+
+    for (var element in insxModel2s) {
+      if (element.invoice_status != MyConstant.valueInvoiceStatus) {
+        insxModels2trues.add(element);
+        colorIcons.add(calculageHues(element.noti_date));
+        files.add(null);
+        filterInsxModel2s.add(element);
+        setState(() {});
+      }
     }
 
-    await SQLiteHelper().readSQLite().then((value) {
-      setState(() {
-        loadStatus = false;
-      });
-
-      if (value.length != 0) {
-        var result = value;
-
-        for (var model in result) {
-          if (model.invoice_status != MyConstant.valueInvoiceStatus) {
-            InsxSQLiteModel insxModel2 = model;
-            setState(() {
-              insxModel2s.add(insxModel2);
-              colorIcons.add(calculageHues(insxModel2.noti_date));
-              files.add(null);
-              filterInsxModel2s = insxModel2s;
-            });
-          }
-        }
-      } else {
-        setState(() {
-          status = false;
-        });
-      }
-    });
+    loadStatus = false;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: insxModel2s.length == 0 ? Text('ไม่พบข้อมูล'): Text('ข้อมูล ${insxModel2s.length} รายการ'),
+        title: insxModel2s.length == 0
+            ? Text('ไม่พบข้อมูล')
+            : Text('ข้อมูล ${insxModel2s.length} รายการ'),
       ),
       body:
           loadStatus ? Center(child: MyStyle().showProgress()) : showContent(),
@@ -188,17 +184,19 @@ class _InsxPageState extends State<InsxPage> {
               physics: ScrollPhysics(),
               itemBuilder: (context, int index) => GestureDetector(
                 onTap: () {
-                  MaterialPageRoute route = MaterialPageRoute(
-                    builder: (context) => InsxEdit2(
-                      insxModel2: filterInsxModel2s[index],
-                    ),
-                  );
-                  Navigator.push(context, route).then(
-                    (value) => readInsx(),
-                  );
+
+                  Navigator.pop(context, filterInsxModel2s[index]);
+
+                  // MaterialPageRoute route = MaterialPageRoute(
+                  //   builder: (context) => InsxEdit2(
+                  //     insxModel2: filterInsxModel2s[index],
+                  //   ),
+                  // );
+                  // Navigator.push(context, route).then(
+                  //   (value) => readInsx(),
+                  // );
                 },
 
-                //=> confirmDialog(insxModel2s[index], colorIcons[index], index),
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

@@ -1,13 +1,6 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:psinsx/models/worktime_model.dart';
 import 'package:psinsx/offlineMode/home_offline.dart';
 import 'package:psinsx/pages/home_page.dart';
-import 'package:psinsx/pages/insx_page.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/out_time.dart';
 import 'package:psinsx/pages/signin_page.dart';
@@ -18,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 final Map<String, WidgetBuilder> map = {
   '/homePage': (BuildContext context) => HomePage(),
   '/signIn': (BuildContext context) => SignIn(),
-  '/insxPage': (BuildContext context) => InsxPage(),
   '/homeOffline': (BuildContext context) => HomeOffline(),
   '/mapDmsx': (BuildContext context) => Mapdmsx(),
   '/workTime': (BuildContext context) => WorkTime(),
@@ -33,20 +25,19 @@ Future<Null> main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String string = preferences.getString('id');
 
-if (string?.isEmpty ?? true) {
+  if (string?.isEmpty ?? true) {
     initialRount = '/signIn';
-  runApp(MyApp());
-} else {
+    runApp(MyApp());
+  } else {
     initialRount = '/homePage';
-  runApp(MyApp());
-
-}
+    runApp(MyApp());
+  }
 
   // if (string?.isEmpty ?? true) {
   //   initialRount = '/signIn';
   //   runApp(MyApp());
   // } else {
-    
+
   //   DateTime dateTime = DateTime.now();
   //   DateFormat dateFormat = DateFormat('yyyy-MM-dd');
 

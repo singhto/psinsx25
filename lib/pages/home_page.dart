@@ -8,6 +8,7 @@ import 'package:psinsx/pages/add_information_user.dart';
 import 'package:psinsx/pages/help_page.dart';
 import 'package:psinsx/pages/information_user.dart';
 import 'package:psinsx/pages/map.dart';
+import 'package:psinsx/pages/map2.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/oil_page.dart';
 import 'package:psinsx/pages/pea_report.dart';
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<InsxModel2> insxModel2s = [];
 
-  List pages = [MyMap(), Mapdmsx(), SearchPage(), PeaReport()];
+  List pages = [MyMap2(), Mapdmsx(), SearchPage(), PeaReport()];
 
   UserModel userModel;
 

@@ -166,7 +166,7 @@ class _AddInformationUserState extends State<AddInformationUser> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  OutlineButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -177,7 +177,7 @@ class _AddInformationUserState extends State<AddInformationUser> {
                       ),
                     ),
                   ),
-                  OutlineButton(
+                  ElevatedButton(
                     onPressed: () {
                       print('click...');
                       Navigator.pop(context);

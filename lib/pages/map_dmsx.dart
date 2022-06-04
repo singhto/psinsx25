@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:psinsx/models/dmsx_model.dart';
 import 'package:psinsx/pages/detail_money.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
+import 'package:psinsx/pages/show_web_view.dart';
 import 'package:psinsx/utility/my_calculate.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
@@ -507,8 +508,13 @@ class _MapdmsxState extends State<Mapdmsx> {
             ),
             TextButton(
                 onPressed: () {
-                 
-                  launchURLloadWork();
+                  //launchURLloadWork();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ShowWebView(url: 'https://www.pea23.com/load_work_dmsx_by_user.php',),
+                    ),
+                  );
                 },
                 child: Text('กด ดึงข้อมูลงานงดจ่ายไฟ'))
           ],

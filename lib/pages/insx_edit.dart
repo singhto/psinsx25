@@ -2,14 +2,19 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:psinsx/models/insx_model2.dart';
+import 'package:psinsx/utility/custom_dialog.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:flutter/services.dart';
+import 'package:psinsx/utility/my_process.dart';
+import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
 
 class InsxEdit extends StatefulWidget {
@@ -28,9 +33,11 @@ class _InsxEditState extends State<InsxEdit> {
   Location location = Location();
   double lat, lng;
   bool fromMap;
+  String distanceStr;
 
   @override
   void initState() {
+    super.initState();
     insxModel2 = widget.insxModel2;
     fromMap = widget.fromMap;
     findLatLng();
@@ -42,10 +49,10 @@ class _InsxEditState extends State<InsxEdit> {
       lat = position.latitude;
       lng = position.longitude;
     });
+    myCalculateDistance();
   }
 
   Future<Position> findPosition() async {
-    Position position;
     try {
       return await Geolocator.getCurrentPosition();
     } catch (e) {
@@ -70,12 +77,58 @@ class _InsxEditState extends State<InsxEdit> {
             writeId(),
             address(),
             showLocation(),
+            showDistance(),
             SizedBox(height: 80),
             groupImage(),
           ],
         ),
       ),
     );
+  }
+
+  Row showDistance() {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'ระยะห่าง:',
+            style: TextStyle(fontSize: 26),
+          ),
+        ),
+        Text(
+          '$distanceStr เมตร',
+          style: TextStyle(fontSize: 26),
+        ),
+      ],
+    );
+  }
+
+  void myCalculateDistance() {
+    double lat2Dou = double.parse(insxModel2.lat);
+    double lng2Dou = double.parse(insxModel2.lng);
+
+    double distanceDou =
+        MyProcess().calculateDistance(lat, lng, lat2Dou, lng2Dou) * 1000;
+
+    NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
+    distanceStr = numberFormat.format(distanceDou);
+
+    if (distanceDou > 200) {
+      CustomDialog().actionDialog(
+          context: context,
+          title: 'เกินระยะ',
+          subTitle: 'ระยะห่างเกิน $distanceStr เมตร',
+          label: 'ลุยต่อ',
+          pressFunc: () {
+            Navigator.pop(context);
+          },
+          label2: 'กลับ',
+          pressFucn2: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+    }
   }
 
   Widget showLocation() => Row(
@@ -238,12 +291,45 @@ class _InsxEditState extends State<InsxEdit> {
         ],
       );
 
-  Widget groupImage() => RaisedButton.icon(
-      padding: EdgeInsets.all(20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      color: Colors.red,
+  Future<void> chooseImageForFindName() async {
+    var result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'heic'],
+    );
+
+    File file = File(result.files.single.path);
+
+    var strings = file.path.split('/');
+    String nameImage = strings.last;
+
+    //##################
+    // หลอก
+    //##################
+    //nameImage = 'INSx020006650925_04062565_131036.png';
+
+    nameImage = nameImage.substring(4, 16);
+
+    String trueName = insxModel2.ca.substring(0, 12);
+
+    print('##4june ชื่อภาพจากเครื่อง $nameImage');
+    print('##4june ชื่อภาพ ca $trueName');
+
+    if (nameImage == trueName) {
+      confirmDialog();
+    } else {
+      normalDialog(context, 'รูปภาพไม่ถูกต้องครับ');
+    }
+  }
+
+  Widget groupImage() => ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      ),
       onPressed: () {
-        confirmDialog();
+        chooseImageForFindName();
+
+        // confirmDialog();
       },
       icon: Icon(
         Icons.lock_open,
@@ -338,11 +424,23 @@ class _InsxEditState extends State<InsxEdit> {
   }
 
   Future<Null> editDataInsx(InsxModel2 insxModel2) async {
-    await SQLiteHelper()
-        .editValueWhereId(int.parse(insxModel2.id))
-        .then((value) {
-      print('####>>>>>> ${insxModel2.id}');
-      Fluttertoast.showToast(msg: 'บันทึกแล้ว');
+    // await SQLiteHelper()
+    //     .editValueWhereId(int.parse(insxModel2.id))
+    //     .then((value) {
+    //   print('####>>>>>> ${insxModel2.id}');
+    //   Fluttertoast.showToast(msg: 'บันทึกแล้ว');
+    //   Navigator.pop(context);
+    // });
+
+    CustomDialog().loadingDialog(context);
+
+    Map<String, dynamic> map = insxModel2.toMap();
+
+    map['invoice_status'] = MyConstant.valueInvoiceStatus;
+
+    InsxModel2 newInsxModel2 = InsxModel2.fromMap(map);
+    await MyProcess().editDataInsx2(insxModel2).then((value) {
+      Navigator.pop(context);
       Navigator.pop(context);
     });
   }
