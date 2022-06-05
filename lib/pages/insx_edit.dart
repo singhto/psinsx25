@@ -393,44 +393,7 @@ class _InsxEditState extends State<InsxEdit> {
     );
   }
 
-  Future<Null> chooseCamera(ImageSource source) async {
-    try {
-      var object = await ImagePicker().getImage(
-        source: source,
-        maxHeight: 800,
-        maxWidth: 800,
-      );
-      setState(() {
-        file = File(object.path);
-        uploadImage();
-      });
-    } catch (e) {}
-  }
-
-  Future<Null> uploadImage() async {
-    String apiSaveFile = '${MyConstant().domain}/apipsinsx/saveFile.php';
-    String fileName = 'insx${Random().nextInt(1000000)}${insxModel2.ca}.jpg';
-
-    try {
-      Map<String, dynamic> map = Map();
-      map['file'] = await MultipartFile.fromFile(file.path, filename: fileName);
-      FormData data = FormData.fromMap(map);
-      await Dio().post(apiSaveFile, data: data).then((value) {
-        urlImage = '${MyConstant().domain}/apipsinsx/upload/$fileName';
-        print('=== usrlImage == $urlImage');
-        editDataInsx(insxModel2);
-      });
-    } catch (e) {}
-  }
-
   Future<Null> editDataInsx(InsxModel2 insxModel2) async {
-    // await SQLiteHelper()
-    //     .editValueWhereId(int.parse(insxModel2.id))
-    //     .then((value) {
-    //   print('####>>>>>> ${insxModel2.id}');
-    //   Fluttertoast.showToast(msg: 'บันทึกแล้ว');
-    //   Navigator.pop(context);
-    // });
 
     CustomDialog().loadingDialog(context);
 

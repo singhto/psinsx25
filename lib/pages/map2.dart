@@ -210,11 +210,13 @@ class _MyMap2State extends State<MyMap2> {
         return Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => InsxPage(insxModel2s: insxModel2s,),
+              builder: (context) => InsxPage(
+                insxModel2s: insxModel2s,
+              ),
             )).then((value) {
-              InsxModel2 insxModel2 = value;
-              print('##4june การกลับจาก insxPage ${insxModel2.cus_name} ');
-            });
+          InsxModel2 insxModel2 = value;
+          print('##4june การกลับจาก insxPage ${insxModel2.cus_name} ');
+        });
       },
       child: Container(
           padding: const EdgeInsets.all(8),
@@ -250,6 +252,7 @@ class _MyMap2State extends State<MyMap2> {
             left: 10,
             child: pinGreen(),
           ),
+
           statusProcessEdit ? showProcessEdit() : SizedBox(),
         ],
       ),
@@ -272,10 +275,6 @@ class _MyMap2State extends State<MyMap2> {
                 SizedBox(width: 20),
                 Text(
                   'กำลังอัพโหลด เหลือ $timeEdit รายการ',
-                  style: TextStyle(fontSize: 12),
-                ),
-                Text(
-                  'หากไม่มีการเคลื่อนไหว ให้กดปุ่มอัพโหลดด้านล่าง',
                   style: TextStyle(fontSize: 12),
                 ),
               ],

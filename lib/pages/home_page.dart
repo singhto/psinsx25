@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/user_model.dart';
 import 'package:psinsx/pages/add_information_user.dart';
+import 'package:psinsx/pages/dashbord.dart';
 
 import 'package:psinsx/pages/help_page.dart';
 import 'package:psinsx/pages/information_user.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<InsxModel2> insxModel2s = [];
 
-  List pages = [MyMap2(), Mapdmsx(), SearchPage(), PeaReport()];
+  List pages = [MyMap2(), Mapdmsx(), SearchPage(), Dashbord()];
 
   UserModel userModel;
 
@@ -176,12 +177,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.red[100],
-              ),
-              onPressed: () {})
+          CircularProfileAvatar(
+            
+          '$userImge',
+          borderWidth: 2,
+          radius: 28,
+          elevation: 5.0,
+          cacheImage: true,
+          foregroundColor: Colors.brown.withOpacity(0.5),
+          imageFit: BoxFit.cover,
+         
+        )
         ],
       ),
       body: pages[selectedIndex],
@@ -198,20 +204,20 @@ class _HomePageState extends State<HomePage> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Insx',
+              icon: Icon(Icons.notifications_active),
+              label: 'แจ้งเตือน',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
-              label: 'Dmsx',
+              label: 'งดจ่ายไฟ',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
-              label: 'ประวัติ&พิกัด',
+              label: 'ประวัติ',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.image),
-              label: 'เช็คภาพ',
+              icon: Icon(Icons.home),
+              label: 'หน้าหลัก',
             ),
           ]),
     );
