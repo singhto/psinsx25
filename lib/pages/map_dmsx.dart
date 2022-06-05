@@ -385,7 +385,6 @@ class _MapdmsxState extends State<Mapdmsx> {
         height: 70,
         child: InkWell(
           onTap: () {
-            print('click builMoney');
             Navigator.push(
               context,
               MaterialPageRoute(

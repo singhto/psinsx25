@@ -76,18 +76,21 @@ class _DetaliMoneyState extends State<DetaliMoney> {
       }
     }
 
+
+
+
     print('###1may map ==>> $map');
     print('###1may fourDigis ==>> $fourDigis');
 
     //การหา total
 
-    Map<String, double> mapPrices = {};
-    mapPrices['WMMI'] = 35.0;
-    mapPrices['WMMR'] = 35.0;
-    mapPrices['FUCN'] = 20.0;
-    mapPrices['FURM'] = 20.0;
-    mapPrices['WMST'] = 10.0;
-    mapPrices['WMS2'] = 10.0;
+    Map<String, int> mapPrices = {};
+    mapPrices['WMMI'] = 35;
+    mapPrices['WMMR'] = 35;
+    mapPrices['FUCN'] = 20;
+    mapPrices['FURM'] = 20;
+    mapPrices['WMST'] = 10;
+    mapPrices['WMS2'] = 10;
 
 
 
@@ -114,9 +117,9 @@ class _DetaliMoneyState extends State<DetaliMoney> {
       grandTotle = grandTotle + totleDou;
     }
 
-    int wmmrInt = map['WMMR'];
-    int furmInt = map['FURM'];
-    int sumInt = wmmrInt + furmInt;
+    int wmmrInt = map['WMMR'] ?? 0;
+    int furmInt = map['FURM'] ?? 0;
+    int sumInt = wmmrInt + furmInt; //have Problem
     double sumDou = sumInt.toDouble();
 
     percent = sumDou / grandTotle * 100;
