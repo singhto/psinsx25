@@ -307,7 +307,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     return Stack(
       children: [
         buildMap(),
-        // buildMoney(),
+        buildMoney(),
         buildControl(),
         buildControlGreen(),
         buildControlPubple(),
@@ -385,15 +385,15 @@ class _MapdmsxState extends State<Mapdmsx> {
         height: 70,
         child: InkWell(
           onTap: () {
-            // print('click builMoney');
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => DetaliMoney(
-            //       dmsxModels: dmsxModels,
-            //     ),
-            //   ),
-            // );
+            print('click builMoney');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetaliMoney(
+                  dmsxModels: dmsxModels,
+                ),
+              ),
+            );
           },
           child: Card(
             color: Colors.black.withOpacity(0.5),
@@ -508,13 +508,13 @@ class _MapdmsxState extends State<Mapdmsx> {
             ),
             TextButton(
                 onPressed: () {
-                  //launchURLloadWork();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ShowWebView(url: 'https://www.pea23.com/load_work_dmsx_by_user.php',),
-                    ),
-                  );
+                  launchURLloadWork();
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const ShowWebView(url: 'https://www.pea23.com/index.php',),
+                  //   ),
+                  // );
                 },
                 child: Text('กด ดึงข้อมูลงานงดจ่ายไฟ'))
           ],
@@ -524,7 +524,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Future<Null> launchURLloadWork() async {
-    final url = 'https://www.pea23.com/load_work_dmsx_by_user.php';
+    final url = 'https://www.pea23.com/index.php';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);

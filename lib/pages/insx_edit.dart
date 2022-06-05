@@ -332,7 +332,7 @@ class _InsxEditState extends State<InsxEdit> {
         // confirmDialog();
       },
       icon: Icon(
-        Icons.lock_open,
+        Icons.save,
         color: Colors.white,
       ),
       label: Text(
@@ -402,7 +402,7 @@ class _InsxEditState extends State<InsxEdit> {
     map['invoice_status'] = MyConstant.valueInvoiceStatus;
 
     InsxModel2 newInsxModel2 = InsxModel2.fromMap(map);
-    await MyProcess().editDataInsx2(insxModel2).then((value) {
+    await MyProcess().editDataInsx2(insxModel2, distanceStr).then((value) {
       Navigator.pop(context);
       Navigator.pop(context);
     });

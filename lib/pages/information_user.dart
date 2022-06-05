@@ -286,14 +286,14 @@ class _InformationUserState extends State<InformationUser> {
                     onPressed: () {}),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 45, right: 16),
-              child: FloatingActionButton(
-                  child: Icon(Icons.edit),
-                  onPressed: () {
-                    routeToAddInfo();
-                  }),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 45, right: 16),
+            //   child: FloatingActionButton(
+            //       child: Icon(Icons.edit),
+            //       onPressed: () {
+            //         routeToAddInfo();
+            //       }),
+            // ),
           ],
         ),
       ],

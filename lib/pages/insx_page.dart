@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +8,9 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:psinsx/models/insx_model.dart';
 import 'package:psinsx/models/insx_model2.dart';
-import 'package:psinsx/models/insx_sqlite_model.dart';
-import 'package:psinsx/pages/insx_edit2.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
-import 'package:psinsx/utility/sqlite_helper.dart';
 
 class InsxPage extends StatefulWidget {
   final List<InsxModel2> insxModel2s;
@@ -39,12 +35,14 @@ class _InsxPageState extends State<InsxPage> {
   String urlImage, search;
   final debouncer = Debouncer(milliseconds: 500);
 
+  Map<String, Color> mapColors = {};
+
   @override
   void initState() {
     super.initState();
     insxModel2s = widget.insxModel2s;
     readInsx();
-    print('##4june ขนาด insxModel2s ${insxModel2s.length}');
+    print('##4june ขนาด insxModel2s ที่ได้มาจาก map2 ${insxModel2s.length}');
   }
 
   void setToOrigin() {
@@ -54,6 +52,7 @@ class _InsxPageState extends State<InsxPage> {
     insxModel2s.clear();
     colorIcons.clear();
     files.clear();
+
   }
 
   Future<Null> readInsx() async {
@@ -65,6 +64,8 @@ class _InsxPageState extends State<InsxPage> {
       if (element.invoice_status != MyConstant.valueInvoiceStatus) {
         insxModels2trues.add(element);
         colorIcons.add(calculageHues(element.noti_date));
+        mapColors[element.id] = calculageHues(element.noti_date);
+
         files.add(null);
         filterInsxModel2s.add(element);
         setState(() {});
@@ -113,15 +114,25 @@ class _InsxPageState extends State<InsxPage> {
 
     DateTime currentDateTime = DateTime.now();
     int diferDate = currentDateTime.difference(notiDateTime).inDays;
-    Color result = colors[0];
+    Color result;
+
+    print('##5june ===>>> $diferDate');
 
     if (diferDate >= 7) {
-      result = colors[3];
+      result = colors[3]; //red
     } else if (diferDate >= 4) {
-      result = colors[2];
-    } else if (diferDate >= 2) {
-      result = colors[1];
+      result = colors[2];  //blue
+    } else if (diferDate >= 1) {
+      result = colors[1]; //yellow 3,2,1
+      
+    } else {
+      result = colors[0]; //green 0 
     }
+
+    
+
+
+
     return result;
   }
 
@@ -204,7 +215,7 @@ class _InsxPageState extends State<InsxPage> {
                       leading: Icon(
                         Icons.pin_drop,
                         size: 26,
-                        color: colorIcons[index],
+                        color: mapColors[filterInsxModel2s[index].id],
                       ),
                       title: Text(
                         filterInsxModel2s[index].cus_name,

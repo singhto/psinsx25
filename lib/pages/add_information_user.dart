@@ -229,6 +229,8 @@ class _AddInformationUserState extends State<AddInformationUser> {
     Response response = await Dio().get(url);
     
     if (response.toString() == 'true') {
+
+      await readCurrentInfo().then((value) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('id', userModel.userId);
       preferences.setString('staffname', userModel.staffname);
@@ -236,6 +238,9 @@ class _AddInformationUserState extends State<AddInformationUser> {
       preferences.setString('user_img', userModel.userImg);
     
       Navigator.pop(context);
+      });
+
+
     } else {
       normalDialog(context, 'อัพเดทไม่ได้ กรุณาลองใหม่');
     }

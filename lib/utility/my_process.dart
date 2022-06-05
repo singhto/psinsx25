@@ -18,9 +18,11 @@ class MyProcess {
     return distance;
   }
 
-  Future<Null> editDataInsx2(InsxModel2 insxModel2) async {
+  Future<Null> editDataInsx2(InsxModel2 insxModel2, String distance) async {
     String url =
-        'https://www.pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}';
+        'https://www.pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}&distance=$distance';
+
+      
 
     await Dio().get(url).then((value) {
       if (value.toString() != 'true') {

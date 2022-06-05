@@ -9,9 +9,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/pages/insx_edit.dart';
 import 'package:psinsx/pages/insx_page.dart';
-import 'package:psinsx/utility/custom_dialog.dart';
+import 'package:psinsx/pages/map.dart';
+import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
+import 'package:psinsx/widgets/show_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyMap2 extends StatefulWidget {
@@ -27,6 +29,12 @@ class _MyMap2State extends State<MyMap2> {
 
   bool statusProcessEdit = false;
 
+  GoogleMapController mapController;
+
+  int greenInt = 0, yellowInt = 0, blueInt = 0, redInt = 0;
+
+  LatLng latLngGreen, latLngYellow, latLngBlue, latLngRed;
+
   @override
   void initState() {
     super.initState();
@@ -34,8 +42,14 @@ class _MyMap2State extends State<MyMap2> {
   }
 
   Future<Null> myReadAPI() async {
-    insxModel2s.clear();
-    insxModelForEdits.clear();
+    if (insxModel2s.isNotEmpty) {
+      greenInt = 0;
+      yellowInt = 0;
+      blueInt = 0;
+      redInt = 0;
+      insxModel2s.clear();
+      insxModelForEdits.clear();
+    }
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String workername = preferences.getString('staffname');
@@ -49,7 +63,8 @@ class _MyMap2State extends State<MyMap2> {
           InsxModel2 model2 = InsxModel2.fromMap(item);
           insxModel2s.add(model2);
         }
-        myAllMarker();
+        print('##5june ขนาดของ insxModel2 == ${insxModel2s.length}');
+        // myAllMarker();
         setState(() {});
       }
     });
@@ -68,7 +83,7 @@ class _MyMap2State extends State<MyMap2> {
     for (var item in insxModel2s) {
       Marker marker = Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(
-            calculageHues(item.noti_date)),
+            calculageHues(item.noti_date, item)),
         markerId: MarkerId('id${item.id}'),
         position: LatLng(double.parse(item.lat), double.parse(item.lng)),
         infoWindow: InfoWindow(
@@ -95,7 +110,7 @@ class _MyMap2State extends State<MyMap2> {
     return markers.toSet();
   }
 
-  double calculageHues(String notidate) {
+  double calculageHues(String notidate, InsxModel2 insxModel2) {
     List<double> hues = [80.0, 60.0, 200.0, 20.0];
     List<String> strings = notidate.split(" ");
     List<String> dateTimeInts = strings[0].split('-');
@@ -107,14 +122,28 @@ class _MyMap2State extends State<MyMap2> {
 
     DateTime currentDateTime = DateTime.now();
     int diferDate = currentDateTime.difference(notiDateTime).inDays;
-    double result = hues[0];
+    double result; //green
 
     if (diferDate >= 7) {
-      result = hues[3];
+      result = hues[3]; //red 20
+      redInt++;
+      latLngRed =
+          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
     } else if (diferDate >= 3) {
-      result = hues[2];
+      result = hues[2]; //blue 150
+      blueInt++;
+      latLngBlue =
+          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
     } else if (diferDate >= 1) {
-      result = hues[1];
+      result = hues[1]; // yellow 60
+      yellowInt++;
+      latLngYellow =
+          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
+    } else {
+      greenInt++;
+      result = hues[0];
+      latLngGreen =
+          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
     }
     return result;
   }
@@ -216,6 +245,14 @@ class _MyMap2State extends State<MyMap2> {
             )).then((value) {
           InsxModel2 insxModel2 = value;
           print('##4june การกลับจาก insxPage ${insxModel2.cus_name} ');
+
+          LatLng latLng = LatLng(
+            double.parse(insxModel2.lat),
+            double.parse(insxModel2.lng),
+          );
+          mapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: latLng, zoom: 22)));
+          myReadAPI();
         });
       },
       child: Container(
@@ -252,13 +289,119 @@ class _MyMap2State extends State<MyMap2> {
             left: 10,
             child: pinGreen(),
           ),
-
+          newCard(
+              top: 80,
+              left: 6,
+              tapFunc: () {
+                mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngGreen, zoom: 16)));
+              },
+              iconData: Icons.pin_drop,
+              label: '$greenInt',
+              color: Colors.green),
+          newCard(
+              top: 152,
+              left: 6,
+              tapFunc: () {
+                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngYellow, zoom: 16)));
+              },
+              iconData: Icons.pin_drop,
+              label: '$yellowInt',
+              color: Colors.yellow),
+          newCard(
+              top: 224,
+              left: 6,
+              tapFunc: () {
+                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngBlue, zoom: 16)));
+              },
+              iconData: Icons.pin_drop,
+              label: '$blueInt',
+              color: Colors.blue),
+          newCard(
+              top: 296,
+              left: 6,
+              tapFunc: () {
+                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngRed, zoom: 16)));
+              },
+              iconData: Icons.pin_drop,
+              label: '$redInt',
+              color: Colors.red),
           statusProcessEdit ? showProcessEdit() : SizedBox(),
         ],
       ),
       bottomNavigationBar: new BottomAppBar(
         color: Colors.white,
         child: new Row(),
+      ),
+    );
+  }
+
+  Positioned newOffine() {
+    return Positioned(
+      top: 80,
+      left: 10,
+      child: InkWell(
+        onTap: () {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyMap(),
+              ),
+              (route) => false);
+        },
+        child: Card(
+          color: Colors.black.withOpacity(0.5),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.pin_drop,
+                  size: 30,
+                ),
+                ShowText(
+                  text: 'ออฟไลน์',
+                  textStyle: MyConstant().h5Style(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned newCard({
+    @required double top,
+    @required double left,
+    @required Function() tapFunc,
+    @required IconData iconData,
+    @required String label,
+    @required Color color,
+  }) {
+    return Positioned(
+      top: top,
+      left: left,
+      child: InkWell(
+        onTap: tapFunc,
+        child: Card(
+          color: Colors.black.withOpacity(0.5),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Icon(
+                  iconData,
+                  size: 30,
+                  color: color,
+                ),
+                ShowText(
+                  text: label,
+                  textStyle: MyConstant().h5Style(),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -289,7 +432,9 @@ class _MyMap2State extends State<MyMap2> {
         target: startMapLatLng,
         zoom: 8,
       ),
-      onMapCreated: (controller) {},
+      onMapCreated: (controller) {
+        mapController = controller;
+      },
       markers: myAllMarker(),
       myLocationButtonEnabled: true,
       myLocationEnabled: true,

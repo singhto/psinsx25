@@ -11,9 +11,6 @@ import 'package:psinsx/pages/information_user.dart';
 import 'package:psinsx/pages/map.dart';
 import 'package:psinsx/pages/map2.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
-import 'package:psinsx/pages/oil_page.dart';
-import 'package:psinsx/pages/pea_report.dart';
-import 'package:psinsx/pages/perpay.dart';
 import 'package:psinsx/pages/search_page.dart';
 import 'package:psinsx/pages/signin_page.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
@@ -69,11 +66,7 @@ class _HomePageState extends State<HomePage> {
       ),
       currentAccountPicture: GestureDetector(
         onTap: () {
-          MaterialPageRoute materialPageRoute = MaterialPageRoute(
-            builder: (context) => AddInformationUser(),
-          );
-          Navigator.push(context, materialPageRoute)
-              .then((value) => readUserInfo());
+          moveToEditProfile();
         },
         child: CircularProfileAvatar(
           '$userImge',
@@ -85,6 +78,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void moveToEditProfile() {
+    MaterialPageRoute materialPageRoute = MaterialPageRoute(
+      builder: (context) => AddInformationUser(),
+    );
+    Navigator.push(context, materialPageRoute).then((value) => readUserInfo());
+  }
+
   Future<Null> signOutProcess() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Null> launchURL() async {
-    final url = 'https://www.pea23.com/load_work_by_user.php';
+    final url = 'https://www.pea23.com/index.php';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);
@@ -143,6 +143,19 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(builder: (context) => HelpPage()));
                 }),
             ListTile(
+                leading: Icon(Icons.download_rounded),
+                title: Text('ดึงข้อมูล'),
+                subtitle: Text(
+                  'เปิดเว็ปไซต์บริษัท,แหล่งข้อมูล',
+                  style: TextStyle(fontSize: 10),
+                ),
+                trailing: Icon(Icons.arrow_right),
+                onTap: () {
+                  print('object');
+                  Navigator.pop(context);
+                  launchURL();
+                }),
+            ListTile(
               leading: Icon(Icons.logout),
               title: Text('ออกจากระบบ'),
               subtitle: Text(
@@ -177,17 +190,20 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          CircularProfileAvatar(
-            
-          '$userImge',
-          borderWidth: 2,
-          radius: 28,
-          elevation: 5.0,
-          cacheImage: true,
-          foregroundColor: Colors.brown.withOpacity(0.5),
-          imageFit: BoxFit.cover,
-         
-        )
+          InkWell(
+            onTap: () {
+              moveToEditProfile();
+            },
+            child: CircularProfileAvatar(
+              '$userImge',
+              borderWidth: 2,
+              radius: 28,
+              elevation: 5.0,
+              cacheImage: true,
+              foregroundColor: Colors.brown.withOpacity(0.5),
+              imageFit: BoxFit.cover,
+            ),
+          )
         ],
       ),
       body: pages[selectedIndex],

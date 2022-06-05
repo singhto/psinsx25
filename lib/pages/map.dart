@@ -38,18 +38,18 @@ class _MyMapState extends State<MyMap> {
     //checkSQLit();
   }
 
-  Future<Null> autoRefresh() async{
+  Future<Null> autoRefresh() async {
     DateTime currentTime = DateTime.now();
     DateTime refreshTime = DateTime(
         currentTime.year, currentTime.month, currentTime.day, 23, 00, 0);
-        Timer(refreshTime.difference(currentTime), ()async{
-          print('ถึงเวลาทำงาน');
-          await SQLiteHelper().deleteAllData().then((value) => checkSQLit());
-        });
+    Timer(refreshTime.difference(currentTime), () async {
+      print('ถึงเวลาทำงาน');
+      await SQLiteHelper().deleteAllData().then((value) => checkSQLit());
+    });
   }
-  Future<Null> deleteAllData()async{
+
+  Future<Null> deleteAllData() async {
     await SQLiteHelper().deleteAllData();
-    
   }
 
   bool checkSQLite2() {
@@ -77,7 +77,6 @@ class _MyMapState extends State<MyMap> {
     if (insxModel2s.length == 1) {
       print('add add 1');
       editAndRefresh();
-
     }
 
     insxModel2s.clear();
@@ -345,7 +344,9 @@ class _MyMapState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: lat == null ? MyStyle().showProgress() : buildGoogleMap(),
+      body: SafeArea(
+        child: lat == null ? MyStyle().showProgress() : buildGoogleMap(),
+      ),
     );
   }
 
