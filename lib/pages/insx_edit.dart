@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:psinsx/models/insx_model2.dart';
@@ -15,7 +12,6 @@ import 'package:psinsx/utility/my_constant.dart';
 import 'package:flutter/services.dart';
 import 'package:psinsx/utility/my_process.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
-import 'package:psinsx/utility/sqlite_helper.dart';
 
 class InsxEdit extends StatefulWidget {
   final InsxModel2 insxModel2;

@@ -13,7 +13,9 @@ import 'package:psinsx/pages/map2.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/search_page.dart';
 import 'package:psinsx/pages/signin_page.dart';
+import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
+import 'package:psinsx/widgets/show_text.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,14 +37,32 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<InsxModel2> insxModel2s = [];
 
-  List pages = [MyMap(), Mapdmsx(), SearchPage(), Dashbord()];
+  List pages = [
+    MyMap2(),
+    Mapdmsx(),
+    SearchPage(),
+    Dashbord(),
+  ];
 
   UserModel userModel;
+
+  bool online = true;
 
   @override
   void initState() {
     super.initState();
+    cratePages();
     readUserInfo();
+  }
+
+  void cratePages() {
+    if (pages.isNotEmpty) {
+      pages.clear();
+    }
+    pages.add(online ? MyMap2() : MyMap());
+    pages.add(Mapdmsx());
+    pages.add(SearchPage());
+    pages.add(Dashbord());
   }
 
   Future<Null> readUserInfo() async {
@@ -180,15 +200,35 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         title: Center(
-          child: Text(
-            'สวัสดี $nameUser',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Row(
+            children: [
+              Text(
+                '$nameUser',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                online ? ' ออนไลน์' : ' ออฟไลน์',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: online ? Colors.green : Colors.red
+                ),
+              ),
+            ],
           ),
         ),
         actions: [
+          Switch(
+              value: online,
+              onChanged: (velue) {
+                setState(() {
+                  online = velue;
+                  cratePages();
+                });
+              }),
           InkWell(
             onTap: () {
               moveToEditProfile();

@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
 import 'package:psinsx/pages/insx_edit.dart';
+import 'package:psinsx/pages/insx_edit_old.dart';
 import 'package:psinsx/pages/insx_page.dart';
 import 'package:psinsx/pages/insx_page_old.dart';
 import 'package:psinsx/utility/custom_dialog.dart';
@@ -209,7 +210,7 @@ class _MyMapState extends State<MyMap> {
           snippet: '${item.write_id} PEA:${item.pea_no}',
           onTap: () {
             MaterialPageRoute route = MaterialPageRoute(
-              builder: (context) => InsxEdit(
+              builder: (context) => InsxEditOld(
                 insxModel2: item,
                 fromMap: true,
               ),

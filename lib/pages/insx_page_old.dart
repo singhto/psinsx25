@@ -121,11 +121,14 @@ class _InsxPageOldState extends State<InsxPageOld> {
     Color result = colors[0];
 
     if (diferDate >= 7) {
-      result = colors[3];
+      result = colors[3]; //red
     } else if (diferDate >= 4) {
-      result = colors[2];
-    } else if (diferDate >= 2) {
-      result = colors[1];
+      result = colors[2];  //blue
+    } else if (diferDate >= 1) {
+      result = colors[1]; //yellow 3,2,1
+      
+    } else {
+      result = colors[0]; //green 0 
     }
     return result;
   }

@@ -129,10 +129,6 @@ class _InsxPageState extends State<InsxPage> {
       result = colors[0]; //green 0 
     }
 
-    
-
-
-
     return result;
   }
 

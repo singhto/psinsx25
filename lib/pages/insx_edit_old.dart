@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:psinsx/models/insx_model2.dart';
+import 'package:psinsx/utility/custom_dialog.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:flutter/services.dart';
+import 'package:psinsx/utility/my_process.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
 
 class InsxEditOld extends StatefulWidget {
@@ -28,6 +31,7 @@ class _InsxEditOldState extends State<InsxEditOld> {
   Location location = Location();
   double lat, lng;
   bool fromMap;
+  String distanceStr;
 
   @override
   void initState() {
@@ -36,12 +40,58 @@ class _InsxEditOldState extends State<InsxEditOld> {
     findLatLng();
   }
 
+  Row showDistance() {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'ระยะห่าง:',
+            style: TextStyle(fontSize: 26),
+          ),
+        ),
+        Text(
+          '$distanceStr เมตร',
+          style: TextStyle(fontSize: 26),
+        ),
+      ],
+    );
+  }
+
+  void myCalculateDistance() {
+    double lat2Dou = double.parse(insxModel2.lat);
+    double lng2Dou = double.parse(insxModel2.lng);
+
+    double distanceDou =
+        MyProcess().calculateDistance(lat, lng, lat2Dou, lng2Dou) * 1000;
+
+    NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
+    distanceStr = numberFormat.format(distanceDou);
+
+    if (distanceDou > 200) {
+      CustomDialog().actionDialog(
+          context: context,
+          title: 'เกินระยะ',
+          subTitle: 'ระยะห่างเกิน $distanceStr เมตร',
+          label: 'ลุยต่อ',
+          pressFunc: () {
+            Navigator.pop(context);
+          },
+          label2: 'กลับ',
+          pressFucn2: () {
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+    }
+  }
+
   Future<Null> findLatLng() async {
     Position position = await findPosition();
     setState(() {
       lat = position.latitude;
       lng = position.longitude;
     });
+    myCalculateDistance();
   }
 
   Future<Position> findPosition() async {
@@ -70,6 +120,7 @@ class _InsxEditOldState extends State<InsxEditOld> {
             writeId(),
             address(),
             showLocation(),
+            showDistance(),
             SizedBox(height: 80),
             groupImage(),
           ],
