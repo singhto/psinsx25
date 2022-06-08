@@ -307,7 +307,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     return Stack(
       children: [
         buildMap(),
-        buildMoney(),
+        //buildMoney(),
         buildControl(),
         buildControlGreen(),
         buildControlPubple(),
@@ -397,12 +397,16 @@ class _MapdmsxState extends State<Mapdmsx> {
           child: Card(
             color: Colors.black.withOpacity(0.5),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text('รายได้', style: TextStyle(fontSize: 8)),
-                  Text('$total ฿'),
-                ],
+              padding: const EdgeInsets.all(4),
+              child: Center(
+                child: Column(mainAxisSize: MainAxisSize.min,
+                  children: [
+                     Icon(Icons.read_more_rounded),
+                    Text('ผลดำเนินการ', style: TextStyle(fontSize: 8)),
+                    //Text('ประสิทธิภาพ', style: TextStyle(fontSize: 8)),
+                    //Text('$total ฿'),
+                  ],
+                ),
               ),
             ),
           ),
@@ -482,7 +486,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                       style: TextStyle(fontSize: 10),
                     ),
                     Text(
-                      'ต่อกลับ',
+                      'ให้ต่อกลับ',
                       style: TextStyle(fontSize: 8),
                     ),
                   ],

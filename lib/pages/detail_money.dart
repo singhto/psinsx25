@@ -132,7 +132,7 @@ class _DetaliMoneyState extends State<DetaliMoney> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ผลงาน'),
+        title: Center(child: Text('ผลงานดำเนินการ')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

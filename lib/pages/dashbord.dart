@@ -87,7 +87,7 @@ class _DashbordState extends State<Dashbord> {
                 child: Column(
                   children: [
                     Icon(Icons.settings, size: 100,),
-                    Text('Veision 1.41'),
+                    Text('Veision 1.42'),
                   ],
                 ),
               ),

@@ -151,7 +151,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 trailing: Icon(Icons.arrow_right),
                 onTap: () {
-                  print('object');
                   Navigator.pop(context);
                   launchURL();
                 }),
@@ -170,9 +169,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Divider(),
             ListTile(
-              title: Text('Version 1.41'),
+              title: Text('Version 1.42'),
               subtitle: Text(
-                'อัพเดทเมื่อ 19 พฤษภาคม 2565',
+                'อัพเดทเมื่อ 6 มิถุนายน 2565',
                 style: TextStyle(fontSize: 10),
               ),
             ),

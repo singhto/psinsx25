@@ -262,20 +262,21 @@ class _MyMap2State extends State<MyMap2> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.list_alt_rounded,
+                Icons.search,
                 size: 30,
-                color: Colors.grey[800],
+                color: Color.fromARGB(255, 248, 245, 245),
               ),
+            
               Text(
                 '${insxModel2s.length}',
                 style: TextStyle(
                     fontSize: 12,
-                    color: Colors.red[900],
+                    color: Color.fromARGB(255, 245, 241, 241),
                     fontWeight: FontWeight.bold),
               )
             ],
           ),
-          color: Colors.red[100]),
+          color: Color.fromARGB(255, 77, 73, 73)),
     );
   }
 
@@ -293,7 +294,8 @@ class _MyMap2State extends State<MyMap2> {
               top: 80,
               left: 6,
               tapFunc: () {
-                mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngGreen, zoom: 16)));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(target: latLngGreen, zoom: 16)));
               },
               iconData: Icons.pin_drop,
               label: '$greenInt',
@@ -302,7 +304,8 @@ class _MyMap2State extends State<MyMap2> {
               top: 152,
               left: 6,
               tapFunc: () {
-                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngYellow, zoom: 16)));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(target: latLngYellow, zoom: 16)));
               },
               iconData: Icons.pin_drop,
               label: '$yellowInt',
@@ -311,7 +314,8 @@ class _MyMap2State extends State<MyMap2> {
               top: 224,
               left: 6,
               tapFunc: () {
-                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngBlue, zoom: 16)));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(target: latLngBlue, zoom: 16)));
               },
               iconData: Icons.pin_drop,
               label: '$blueInt',
@@ -320,7 +324,8 @@ class _MyMap2State extends State<MyMap2> {
               top: 296,
               left: 6,
               tapFunc: () {
-                 mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: latLngRed, zoom: 16)));
+                mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(target: latLngRed, zoom: 16)));
               },
               iconData: Icons.pin_drop,
               label: '$redInt',
