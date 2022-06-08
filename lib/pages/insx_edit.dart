@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:psinsx/models/insx_model2.dart';
@@ -30,6 +32,9 @@ class _InsxEditState extends State<InsxEdit> {
   double lat, lng;
   bool fromMap;
   String distanceStr;
+  bool statusContinue = false; //ไม่สามารถไปต่อได้
+  double distanceDou;
+  String work_image = '';
 
   @override
   void initState() {
@@ -74,7 +79,33 @@ class _InsxEditState extends State<InsxEdit> {
             address(),
             showLocation(),
             showDistance(),
-            SizedBox(height: 80),
+            file == null
+                ? SizedBox(height: 80)
+                : SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Stack(
+                        children: [
+                          Image.file(
+                            file,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: IconButton(
+                              onPressed: () {
+                                processTakePhoto();
+                              },
+                              icon: Icon(Icons.add_a_photo),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             groupImage(),
           ],
         ),
@@ -109,7 +140,9 @@ class _InsxEditState extends State<InsxEdit> {
 
     NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
     distanceStr = numberFormat.format(distanceDou);
+  }
 
+  void checkDistance(double distanceDou) {
     if (distanceDou > 200) {
       CustomDialog().actionDialog(
           context: context,
@@ -317,13 +350,48 @@ class _InsxEditState extends State<InsxEdit> {
     }
   }
 
+  Future<void> processTakePhoto() async {
+    var result = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      maxWidth: 800,
+      maxHeight: 800,
+    );
+    file = File(result.path);
+    statusContinue = true;
+    setState(() {});
+  }
+
   Widget groupImage() => ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
         primary: Colors.red,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
       onPressed: () {
-        chooseImageForFindName();
+        if (double.parse(distanceStr) > 200) {
+          //ถ่ายรูป
+          if (!statusContinue) {
+            CustomDialog().actionDialog(
+                context: context,
+                title: 'เนื่องจากระยะเกิน 200 เมตร',
+                subTitle: 'คุณจะถ่ายรูปไว้เป็นหลักฐานหรือไม่',
+                label: 'ถ่ายรูป',
+                pressFunc: () {
+                  Navigator.pop(context);
+                  processTakePhoto();
+                },
+                label2: 'บันทึกโดยไม่ถ่ายรูป',
+                pressFucn2: () {
+                  Navigator.pop(context);
+                  statusContinue = true;
+                  processChackHaveImage();
+                });
+          } else {
+            confirmDialog();
+          }
+        } else {
+          confirmDialog();
+        }
+        // chooseImageForFindName();
 
         // confirmDialog();
       },
@@ -371,7 +439,7 @@ class _InsxEditState extends State<InsxEdit> {
                   MaterialButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      editDataInsx(insxModel2);
+                      processChackHaveImage();
                     },
                     child: Text(
                       'แน่ใจ',
@@ -390,7 +458,6 @@ class _InsxEditState extends State<InsxEdit> {
   }
 
   Future<Null> editDataInsx(InsxModel2 insxModel2) async {
-
     CustomDialog().loadingDialog(context);
 
     Map<String, dynamic> map = insxModel2.toMap();
@@ -398,9 +465,37 @@ class _InsxEditState extends State<InsxEdit> {
     map['invoice_status'] = MyConstant.valueInvoiceStatus;
 
     InsxModel2 newInsxModel2 = InsxModel2.fromMap(map);
-    await MyProcess().editDataInsx2(insxModel2, distanceStr).then((value) {
+
+    await MyProcess()
+        .editDataInsx2(
+            insxModel2: insxModel2,
+            distance: distanceStr,
+            work_image: work_image)
+        .then((value) {
       Navigator.pop(context);
       Navigator.pop(context);
     });
+  }
+
+  Future<void> processChackHaveImage() async {
+    if (file == null) {
+      editDataInsx(insxModel2);
+    } else {
+      String nameImage = 'image${insxModel2.id}.jpg';
+
+      print('##8jun nameImage = $nameImage');
+
+      Map<String, dynamic> map = {};
+      map['file'] =
+          await MultipartFile.fromFile(file.path, filename: nameImage);
+      FormData formData = FormData.fromMap(map);
+      await Dio()
+          .post(MyConstant.apiUploadToWorkImage, data: formData)
+          .then((value) {
+        work_image = '${MyConstant.domainUploadinsx}$nameImage';
+        print('##8jun Image === $work_image');
+        editDataInsx(insxModel2);
+      });
+    }
   }
 }

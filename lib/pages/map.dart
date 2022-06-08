@@ -30,6 +30,7 @@ class _MyMapState extends State<MyMap> {
   List<InsxModel2> insxModel2s = [];
 
   bool statusProcessEdit = false;
+  GoogleMapController googleMapController;
 
   @override
   void initState() {
@@ -425,8 +426,22 @@ class _MyMapState extends State<MyMap> {
 
   Widget pinGreen() {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/insxPage')
-          .then((value) => readSQLiteData()),
+      onTap: () => Navigator.pushNamed(context, '/insxPage').then((value) {
+        if (value != null) {
+          InsxSQLiteModel insxSQLiteModel = value;
+          print(
+              '##8jun การกลับมาจาก insx page ==:::: ${insxSQLiteModel.cus_name}');
+          LatLng latLng = LatLng(double.parse(insxSQLiteModel.lat),
+              double.parse(insxSQLiteModel.lng));
+          googleMapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(target: latLng, zoom: 22),
+            ),
+          );
+        }
+
+        //readSQLiteData();
+      }),
       child: Container(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -573,7 +588,9 @@ class _MyMapState extends State<MyMap> {
         target: startMapLatLng,
         zoom: 8,
       ),
-      onMapCreated: (controller) {},
+      onMapCreated: (controller) {
+        googleMapController = controller;
+      },
       markers: myAllMarker(),
       myLocationButtonEnabled: true,
       myLocationEnabled: true,

@@ -32,9 +32,13 @@ class _InsxEditOldState extends State<InsxEditOld> {
   double lat, lng;
   bool fromMap;
   String distanceStr;
+  
+  double distanceDou;
 
   @override
   void initState() {
+    // TODO: implement initState
+
     insxModel2 = widget.insxModel2;
     fromMap = widget.fromMap;
     findLatLng();
@@ -62,13 +66,17 @@ class _InsxEditOldState extends State<InsxEditOld> {
     double lat2Dou = double.parse(insxModel2.lat);
     double lng2Dou = double.parse(insxModel2.lng);
 
-    double distanceDou =
+    distanceDou =
         MyProcess().calculateDistance(lat, lng, lat2Dou, lng2Dou) * 1000;
 
     NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
     distanceStr = numberFormat.format(distanceDou);
 
-    if (distanceDou > 200) {
+    
+  }
+
+  void checkDistanceDiaiog(double distanceDou) {
+      if (distanceDou > 200) {
       CustomDialog().actionDialog(
           context: context,
           title: 'เกินระยะ',

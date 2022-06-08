@@ -86,7 +86,11 @@ class _InsxPageOldState extends State<InsxPageOld> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: insxModel2s.length == 0 ? Text('ไม่พบข้อมูล'): Text('ข้อมูล ${insxModel2s.length} รายการ'),
+        title: loadStatus
+            ? const SizedBox()
+            : insxModel2s.length == 0
+                ? Text('ไม่พบข้อมูล')
+                : Text('ข้อมูล ${insxModel2s.length} รายการ'),
       ),
       body:
           loadStatus ? Center(child: MyStyle().showProgress()) : showContent(),
@@ -99,7 +103,7 @@ class _InsxPageOldState extends State<InsxPageOld> {
         : Container(
             child: Center(
               child: Text(
-                'No Data',
+                'ไม่พบข้อมูล',
                 style: TextTheme().bodyText1,
               ),
             ),
@@ -123,12 +127,12 @@ class _InsxPageOldState extends State<InsxPageOld> {
     if (diferDate >= 7) {
       result = colors[3]; //red
     } else if (diferDate >= 4) {
-      result = colors[2];  //blue
+      result = colors[2]; //blue
     } else if (diferDate >= 1) {
       result = colors[1]; //yellow 3,2,1
-      
+
     } else {
-      result = colors[0]; //green 0 
+      result = colors[0]; //green 0
     }
     return result;
   }
@@ -192,14 +196,17 @@ class _InsxPageOldState extends State<InsxPageOld> {
               physics: ScrollPhysics(),
               itemBuilder: (context, int index) => GestureDetector(
                 onTap: () {
-                  MaterialPageRoute route = MaterialPageRoute(
-                    builder: (context) => InsxEdit2Old(
-                      insxModel2: filterInsxModel2s[index],
-                    ),
-                  );
-                  Navigator.push(context, route).then(
-                    (value) => readInsx(),
-                  );
+
+                  Navigator.pop(context, filterInsxModel2s[index]);
+
+                  // MaterialPageRoute route = MaterialPageRoute(
+                  //   builder: (context) => InsxEdit2Old(
+                  //     insxModel2: filterInsxModel2s[index],
+                  //   ),
+                  // );
+                  // Navigator.push(context, route).then(
+                  //   (value) => readInsx(),
+                  // );
                 },
 
                 //=> confirmDialog(insxModel2s[index], colorIcons[index], index),

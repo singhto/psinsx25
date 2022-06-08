@@ -6,6 +6,8 @@ class MyConstant {
   static String valueInvoiceStatus = 'ดำเนินการเสร็จสมบูรณ์';
 
   static String domainImage = 'https://www.pea23.com/apipsinsx/dmsxupload/';
+  static String apiUploadToWorkImage = 'https://www.pea23.com/apipsinsx/saveFileinsx.php';
+  static String domainUploadinsx = 'https://www.pea23.com/apipsinsx/uploadinsx/';
 
   static List<String> typeOils = [
     'เบนซิน91', 'เบนซิน95' , 'ดีเซล'
