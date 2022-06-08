@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:psinsx/offlineMode/home_offline.dart';
 import 'package:psinsx/pages/home_page.dart';
+import 'package:psinsx/pages/insx_page_old.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/out_time.dart';
 import 'package:psinsx/pages/signin_page.dart';
@@ -16,6 +17,7 @@ final Map<String, WidgetBuilder> map = {
   '/workTime': (BuildContext context) => WorkTime(),
   '/outTime': (BuildContext context) => OutTime(),
   '/waitWork': (BuildContext context) => WaitWork(),
+  '/insxPage': (BuildContext context) => InsxPageOld(),
 };
 
 String initialRount;
