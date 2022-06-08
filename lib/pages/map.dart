@@ -10,6 +10,7 @@ import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
 import 'package:psinsx/pages/insx_edit.dart';
 import 'package:psinsx/pages/insx_page.dart';
+import 'package:psinsx/pages/insx_page_old.dart';
 import 'package:psinsx/utility/custom_dialog.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
@@ -543,7 +544,7 @@ class _MyMapState extends State<MyMap> {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => InsxPage()));
+            context, MaterialPageRoute(builder: (context) => InsxPageOld()));
       },
       child: Container(
           padding: const EdgeInsets.all(8),

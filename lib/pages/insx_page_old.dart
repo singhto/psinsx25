@@ -10,6 +10,7 @@ import 'package:psinsx/models/insx_model.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
 import 'package:psinsx/pages/insx_edit2.dart';
+import 'package:psinsx/pages/insx_edit2_old.dart';
 
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
@@ -189,7 +190,7 @@ class _InsxPageOldState extends State<InsxPageOld> {
               itemBuilder: (context, int index) => GestureDetector(
                 onTap: () {
                   MaterialPageRoute route = MaterialPageRoute(
-                    builder: (context) => InsxEdit2(
+                    builder: (context) => InsxEdit2Old(
                       insxModel2: filterInsxModel2s[index],
                     ),
                   );
