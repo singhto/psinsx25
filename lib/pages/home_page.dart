@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
   List<InsxModel2> insxModel2s = [];
 
-  List pages = [MyMap2(), Mapdmsx(), SearchPage(), Dashbord()];
+  List pages = [MyMap(), Mapdmsx(), SearchPage(), Dashbord()];
 
   UserModel userModel;
 
