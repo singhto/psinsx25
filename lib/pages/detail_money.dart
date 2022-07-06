@@ -22,14 +22,13 @@ class _DetaliMoneyState extends State<DetaliMoney> {
   double totel = 0, percent = 0;
   String percentStr, totelStr;
 
-      Map<String, String> mapTH = {};
-    
-
+  Map<String, String> mapTH = {};
 
   @override
   void initState() {
     super.initState();
     dmsxModels = widget.dmsxModels;
+
     mapTH['WMMI'] = 'ต่อมิเตอร์แล้ว';
     mapTH['WMMR'] = 'ถอดมิเตอร์แล้ว';
     mapTH['FUCN'] = 'ต่อสายแล้ว';
@@ -45,6 +44,8 @@ class _DetaliMoneyState extends State<DetaliMoney> {
     for (var item in dmsxModels) {
       String string = item.images;
 
+      print('##6jul string == $string');
+
       if (string.isNotEmpty) {
         string = string.substring(1, string.length - 1);
         if (string.contains(',')) {
@@ -58,7 +59,7 @@ class _DetaliMoneyState extends State<DetaliMoney> {
       }
     } // for
 
-    print('###1may images ==>> $images');
+    print('##6jul images ==>> $images');
 
     // การหา array ของรายการที่ไม่ซ้ำกัน และจำนวนที่ซ้ำ
 
@@ -76,11 +77,23 @@ class _DetaliMoneyState extends State<DetaliMoney> {
       }
     }
 
+    print('##6jul map แบบไม่ซ้ำ ก่อน check WMST WMS2 ==>> $map');
 
+    if (map['WMST'] != null) {
+      if (map['WMST'] != 1) {
+        map['WMST']--;
+      }
+    }
 
+    if (map['WMS2'] != null) {
+      if (map['WMS2'] != 1) {
+        map['WMS2']--;
+      }
+    }
 
-    print('###1may map ==>> $map');
-    print('###1may fourDigis ==>> $fourDigis');
+    print('##6jul map แบบไม่ซ้ำ หลัง check WMST WMS2 ==>> $map');
+
+    print('##6jul fourDigis ==>> $fourDigis');
 
     //การหา total
 
@@ -92,17 +105,29 @@ class _DetaliMoneyState extends State<DetaliMoney> {
     mapPrices['WMST'] = 10;
     mapPrices['WMS2'] = 10;
 
-
-
     for (var item in fourDigis) {
+      print('##6jul ส่วนของ $item ===> ${map[item] * mapPrices[item]}');
+
       totel = totel + (map[item] * mapPrices[item]);
     }
 
     NumberFormat numberFormatTotel = NumberFormat('##0.00', 'en_US');
     totelStr = numberFormatTotel.format(totel);
 
-
     //การหาเปอร์เซ็นต์
+
+    if (map['WMST'] != null) {
+      if (map['WMST'] != 1) {
+        map['WMST']--;
+      }
+    }
+
+    if (map['WMS2'] != null) {
+      if (map['WMS2'] != 1) {
+        map['WMS2']--;
+      }
+    }
+
     var keyPercents = [
       'WMMR',
       'FURM',
@@ -123,7 +148,7 @@ class _DetaliMoneyState extends State<DetaliMoney> {
     double sumDou = sumInt.toDouble();
 
     percent = sumDou / grandTotle * 100;
-    
+
     NumberFormat numberFormat = NumberFormat('##0.00', 'en_US');
     percentStr = numberFormat.format(percent);
   }
@@ -147,7 +172,7 @@ class _DetaliMoneyState extends State<DetaliMoney> {
               text: '$percentStr',
               textStyle: TextStyle(fontSize: 60),
             ),
-             ShowText(text: '%'),
+            ShowText(text: '%'),
             Divider(
               color: Color.fromARGB(255, 237, 237, 234),
             ),
@@ -160,15 +185,15 @@ class _DetaliMoneyState extends State<DetaliMoney> {
 
   Column showIncome() {
     return Column(
-            children: [
-              ShowText(text: 'รายได้วันนี้'),
-              ShowText(
-                text: totelStr,
-                textStyle: TextStyle(fontSize: 60),
-              ),
-               ShowText(text: 'บาท'),
-            ],
-          );
+      children: [
+        ShowText(text: 'รายได้วันนี้'),
+        ShowText(
+          text: totelStr,
+          textStyle: TextStyle(fontSize: 60),
+        ),
+        ShowText(text: 'บาท'),
+      ],
+    );
   }
 
   Widget listFourDigis() {

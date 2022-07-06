@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:psinsx/models/dmsx_model.dart';
 import 'package:psinsx/pages/detail_money.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
-import 'package:psinsx/pages/show_web_view.dart';
 import 'package:psinsx/utility/my_calculate.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/my_style.dart';
@@ -258,8 +257,21 @@ class _MapdmsxState extends State<Mapdmsx> {
                 }
               }
 
-              print('###30April  groubFourDigi ==>> $groupForDigi');
-              print('###30April  map ==>> $map');
+              print('##6jul  groubFourDigi ==>> $groupForDigi');
+
+              if (map['WMST'] != null) {
+                if (map['WMST'] != 1) {
+                  map['WMST']--;
+                }
+              }
+
+              if (map['WMS2'] != null) {
+                if (map['WMS2'] != 1) {
+                  map['WMS2']--;
+                }
+              }
+
+              print('##6jul  map ==>> $map');
 
               Map<String, double> mapPrices = {};
               mapPrices['WMMI'] = 35.0;
@@ -273,7 +285,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                 total = total + (map[item4] * mapPrices[item4]);
               }
 
-              print('###30April total ==>>> $total');
+              print('##6jul total ==>>> $total');
 
               // other
               showMarkers = markers;
@@ -399,12 +411,13 @@ class _MapdmsxState extends State<Mapdmsx> {
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: Center(
-                child: Column(mainAxisSize: MainAxisSize.min,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.read_more_rounded),
+                    //Icon(Icons.read_more_rounded),
+                    Text('$total ฿'),
                     Text('ผลดำเนินการ', style: TextStyle(fontSize: 8)),
                     //Text('ประสิทธิภาพ', style: TextStyle(fontSize: 8)),
-                    //Text('$total ฿'),
                   ],
                 ),
               ),
