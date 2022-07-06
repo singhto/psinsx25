@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
 import 'package:psinsx/pages/insx_edit.dart';
@@ -14,6 +15,7 @@ import 'package:psinsx/pages/insx_page.dart';
 import 'package:psinsx/pages/insx_page_old.dart';
 import 'package:psinsx/utility/custom_dialog.dart';
 import 'package:psinsx/utility/my_constant.dart';
+import 'package:psinsx/utility/my_process.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
@@ -406,38 +408,56 @@ class _MyMapState extends State<MyMap> {
   }
 
   Future<Null> editDataInsx2(InsxModel2 insxModel2) async {
-    String url =
-        'https://www.pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}';
+    double distanceDou = MyProcess().calculateDistance(
+        lat, lng, double.parse(insxModel2.lat), double.parse(insxModel2.lng));
+    NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
+    String distanceStr = numberFormat.format(distanceDou);
 
-    print('==== url edittttt>>>> $url');
-
-    //Fluttertoast.showToast(msg: 'อัพโหลด ${insxModelForEdits.length} รายการ');
-
-    await Dio().get(url).then((value) {
+    await MyProcess()
+        .editDataInsx2(
+            insxModel2: insxModel2, distance: distanceStr, work_image: '')
+        .then((value) {
       if (value.toString() == 'true') {
-        //readSQLiteData();
-        //myReadAPI();
-        //Fluttertoast.showToast(msg: 'กำลังอัพโหลด...');
       } else {
         Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด กรุณาลองใหม่');
       }
     });
+
+    // String url =
+    //     'https://www.pea23.com/apipsinsx/editDataWhereInvoiceNo.php?isAdd=true&invoice_no=${insxModel2.invoice_no}';
+
+    // print('==== url edittttt>>>> $url');
+
+    // //Fluttertoast.showToast(msg: 'อัพโหลด ${insxModelForEdits.length} รายการ');
+
+    // await Dio().get(url).then((value) {
+    //   if (value.toString() == 'true') {
+    //     //readSQLiteData();
+    //     //myReadAPI();
+    //     //Fluttertoast.showToast(msg: 'กำลังอัพโหลด...');
+    //   } else {
+    //     Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด กรุณาลองใหม่');
+    //   }
+    // });
   }
 
   Widget pinGreen() {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/insxPage').then((value) {
+      onTap: () =>
+          Navigator.pushNamed(context, '/insxPage').then((value) async {
         if (value != null) {
           InsxSQLiteModel insxSQLiteModel = value;
           print(
               '##8jun การกลับมาจาก insx page ==:::: ${insxSQLiteModel.cus_name}');
-          LatLng latLng = LatLng(double.parse(insxSQLiteModel.lat),
-              double.parse(insxSQLiteModel.lng));
-          googleMapController.animateCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(target: latLng, zoom: 22),
-            ),
-          );
+          await readSQLiteData().then((value) {
+            LatLng latLng = LatLng(double.parse(insxSQLiteModel.lat),
+                double.parse(insxSQLiteModel.lng));
+            googleMapController.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(target: latLng, zoom: 22),
+              ),
+            );
+          });
         }
 
         //readSQLiteData();

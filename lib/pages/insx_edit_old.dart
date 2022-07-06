@@ -32,7 +32,7 @@ class _InsxEditOldState extends State<InsxEditOld> {
   double lat, lng;
   bool fromMap;
   String distanceStr;
-  
+
   double distanceDou;
 
   @override
@@ -71,12 +71,10 @@ class _InsxEditOldState extends State<InsxEditOld> {
 
     NumberFormat numberFormat = NumberFormat('#0.00', 'en_US');
     distanceStr = numberFormat.format(distanceDou);
-
-    
   }
 
   void checkDistanceDiaiog(double distanceDou) {
-      if (distanceDou > 200) {
+    if (distanceDou > 200) {
       CustomDialog().actionDialog(
           context: context,
           title: 'เกินระยะ',
@@ -84,6 +82,7 @@ class _InsxEditOldState extends State<InsxEditOld> {
           label: 'ลุยต่อ',
           pressFunc: () {
             Navigator.pop(context);
+            editDataInsx(insxModel2);
           },
           label2: 'กลับ',
           pressFucn2: () {
@@ -297,12 +296,14 @@ class _InsxEditOldState extends State<InsxEditOld> {
         ],
       );
 
-  Widget groupImage() => RaisedButton.icon(
-      padding: EdgeInsets.all(20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      color: Colors.red,
+  Widget groupImage() => ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      ),
       onPressed: () {
-        confirmDialog();
+        checkDistanceDiaiog(distanceDou);
+        //confirmDialog();
       },
       icon: Icon(
         Icons.lock_open,
