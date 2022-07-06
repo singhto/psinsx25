@@ -307,7 +307,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     return Stack(
       children: [
         buildMap(),
-        //buildMoney(),
+        buildMoney(),
         buildControl(),
         buildControlGreen(),
         buildControlPubple(),
@@ -401,7 +401,7 @@ class _MapdmsxState extends State<Mapdmsx> {
               child: Center(
                 child: Column(mainAxisSize: MainAxisSize.min,
                   children: [
-                     Icon(Icons.read_more_rounded),
+                    Icon(Icons.read_more_rounded),
                     Text('ผลดำเนินการ', style: TextStyle(fontSize: 8)),
                     //Text('ประสิทธิภาพ', style: TextStyle(fontSize: 8)),
                     //Text('$total ฿'),
@@ -519,7 +519,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                   //   ),
                   // );
                 },
-                child: Text('กด ดึงข้อมูลงานงดจ่ายไฟ'))
+                child: Text('คลิก! ดึงข้อมูลงานงดจ่ายไฟ'))
           ],
         ),
       ),
