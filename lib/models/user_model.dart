@@ -49,7 +49,7 @@ class UserModel {
   UserModel.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     staffname = json['staffname'];
-    staffsurname = json['staffsurname'];
+    staffsurname = json['staffsurname'] ?? '';
     staffno = json['staffno'];
     username = json['username'];
     password = json['password'];

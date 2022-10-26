@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:psinsx/offlineMode/home_offline.dart';
@@ -24,6 +26,7 @@ final Map<String, WidgetBuilder> map = {
 String initialRount;
 
 Future<Null> main() async {
+  HttpOverrides.global = MyHttpOverride();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   String string = preferences.getString('id');
@@ -94,5 +97,14 @@ class MyApp extends StatelessWidget {
       routes: map,
       initialRoute: initialRount,
     );
+  }
+}
+
+class MyHttpOverride extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    // TODO: implement createHttpClient
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (cert, host, port) => true;
   }
 }

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/user_model.dart';
 import 'package:psinsx/pages/add_information_user.dart';
@@ -13,10 +17,12 @@ import 'package:psinsx/pages/map2.dart';
 import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/search_page.dart';
 import 'package:psinsx/pages/signin_page.dart';
+import 'package:psinsx/pages/take_photo_id.dart';
 import 'package:psinsx/utility/my_constant.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
 import 'package:psinsx/widgets/show_text.dart';
+import 'package:psinsx/widgets/widget_text_button.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,7 +80,29 @@ class _HomePageState extends State<HomePage> {
     userImge = preferences.getString('user_img');
     userId = preferences.getString('id');
 
-    
+    print('##26oct userId ==>>> $userId');
+
+    String urlGetUserWhereId =
+        'https://pea23.com/apipsinsx/getUserWhereId.php?isAdd=true&user_id=$userId';
+    await Dio().get(urlGetUserWhereId).then(
+      (value) {
+        for (var element in json.decode(value.data)) {
+          userModel = UserModel.fromJson(element);
+          print('##26oct == surname === ${userModel.staffsurname}');
+
+          if (userModel.staffsurname.isEmpty) {
+            normalDialog(context, 'กรุณาถ่ายภาพบัตรประชาชน',
+                widget: WidgetTextButton(
+                  label: 'ถ่ายภาพ',
+                  pressFunc: () {
+                    Get.back(); //Navigator.pop
+                    Get.to(TakePhotoId()).then((value) => readUserInfo());
+                  },
+                ));
+          }
+        }
+      },
+    );
 
     setState(() {});
   }

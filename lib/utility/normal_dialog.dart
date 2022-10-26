@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Future<void> normalDialog(BuildContext context, String message) async {
+Future<void> normalDialog(BuildContext context, String message,
+    {Widget widget}) async {
   showDialog(
     context: context,
     builder: (context) => SimpleDialog(
@@ -16,8 +17,11 @@ Future<void> normalDialog(BuildContext context, String message) async {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            widget ?? const SizedBox(),
             TextButton(
-                onPressed: () => Navigator.pop(context), child: Text('OK')),
+              onPressed: () => Navigator.pop(context),
+              child: Text(widget == null ? 'OK' : 'Cancel'),
+            ),
           ],
         )
       ],
