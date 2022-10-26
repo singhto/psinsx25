@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:psinsx/pages/search_dmsx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashbord extends StatefulWidget {
@@ -36,10 +37,19 @@ class _DashbordState extends State<Dashbord> {
             mainAxisSpacing: 10,
             crossAxisCount: 2,
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(8),
-                color: Color.fromARGB(255, 174, 5, 240),
-                child: const Text("He'd have you all unravel at the"),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SearchDmsx(),));
+              },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Color.fromARGB(255, 174, 5, 240),
+                  child: Column(
+                    children: [
+                      Icon(Icons.search, size: 100,),
+                      Text("ค้นหา"),
+                    ],
+                  ),
+                ),
               ),
                Container(
                 padding: const EdgeInsets.all(8),

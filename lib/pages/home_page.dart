@@ -14,6 +14,7 @@ import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/search_page.dart';
 import 'package:psinsx/pages/signin_page.dart';
 import 'package:psinsx/utility/my_constant.dart';
+import 'package:psinsx/utility/normal_dialog.dart';
 import 'package:psinsx/utility/sqlite_helper.dart';
 import 'package:psinsx/widgets/show_text.dart';
 
@@ -189,9 +190,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Divider(),
             ListTile(
-              title: Text('Version 1.43'),
+              title: Text('Version 1.44'),
               subtitle: Text(
-                'อัพเดทเมื่อ 6 กรกฎาคม 2565',
+                'อัพเดทเมื่อ 26 ตุลาคม 2565',
                 style: TextStyle(fontSize: 10),
               ),
             ),
@@ -205,14 +206,14 @@ class _HomePageState extends State<HomePage> {
               Text(
                 '$nameUser',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 online ? ' ออนไลน์' : ' ออฟไลน์',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 8,
                   fontWeight: FontWeight.bold,
                   color: online ? Colors.green : Colors.red
                 ),
@@ -253,9 +254,13 @@ class _HomePageState extends State<HomePage> {
           showUnselectedLabels: true,
           currentIndex: selectedIndex,
           onTap: (int index) {
-            setState(() {
+           if (online) {
+              setState(() {
               selectedIndex = index;
             });
+           } else {
+             normalDialog(context, 'กรุณาเปิดโหมด ออนไลน์ ก่อนครับ');
+           }
           },
           items: [
             BottomNavigationBarItem(

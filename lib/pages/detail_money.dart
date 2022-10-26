@@ -77,21 +77,21 @@ class _DetaliMoneyState extends State<DetaliMoney> {
       }
     }
 
-    print('##6jul map แบบไม่ซ้ำ ก่อน check WMST WMS2 ==>> $map');
+    // print('##6jul map แบบไม่ซ้ำ ก่อน check WMST WMS2 ==>> $map');
 
-    if (map['WMST'] != null) {
-      if (map['WMST'] != 1) {
-        map['WMST']--;
-      }
-    }
+    // if (map['WMST'] != null) {
+    //   if (map['WMST'] != 1) {
+    //     map['WMST']--;
+    //   }
+    // }
 
-    if (map['WMS2'] != null) {
-      if (map['WMS2'] != 1) {
-        map['WMS2']--;
-      }
-    }
+    // if (map['WMS2'] != null) {
+    //   if (map['WMS2'] != 1) {
+    //     map['WMS2']--;
+    //   }
+    // }
 
-    print('##6jul map แบบไม่ซ้ำ หลัง check WMST WMS2 ==>> $map');
+    // print('##6jul map แบบไม่ซ้ำ หลัง check WMST WMS2 ==>> $map');
 
     print('##6jul fourDigis ==>> $fourDigis');
 
@@ -102,8 +102,8 @@ class _DetaliMoneyState extends State<DetaliMoney> {
     mapPrices['WMMR'] = 35;
     mapPrices['FUCN'] = 20;
     mapPrices['FURM'] = 20;
-    mapPrices['WMST'] = 10;
-    mapPrices['WMS2'] = 10;
+    mapPrices['WMST'] = 5;
+    mapPrices['WMS2'] = 5;
 
     for (var item in fourDigis) {
       print('##6jul ส่วนของ $item ===> ${map[item] * mapPrices[item]}');

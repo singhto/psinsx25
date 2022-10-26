@@ -367,19 +367,19 @@ class _InsxEditState extends State<InsxEdit> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       ),
       onPressed: () {
-        if (double.parse(distanceStr) > 200) {
+        if (double.parse(distanceStr) > 150) {
           //ถ่ายรูป
           if (!statusContinue) {
             CustomDialog().actionDialog(
                 context: context,
-                title: 'เนื่องจากระยะเกิน 200 เมตร',
-                subTitle: 'คุณจะถ่ายรูปไว้เป็นหลักฐานหรือไม่',
-                label: 'ถ่ายรูป',
+                title: 'เนื่องจากระยะเกิน 150 เมตร',
+                subTitle: 'กรุณาตรวจสอบความถูกต้องก่อนยืนยัน',
+                label: 'ยกเลิก',
                 pressFunc: () {
                   Navigator.pop(context);
-                  processTakePhoto();
+                  // processTakePhoto();
                 },
-                label2: 'บันทึกโดยไม่ถ่ายรูป',
+                label2: 'ยืนยัน',
                 pressFucn2: () {
                   Navigator.pop(context);
                   statusContinue = true;

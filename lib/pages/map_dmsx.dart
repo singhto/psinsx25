@@ -257,19 +257,19 @@ class _MapdmsxState extends State<Mapdmsx> {
                 }
               }
 
-              print('##6jul  groubFourDigi ==>> $groupForDigi');
+              // print('##6jul  groubFourDigi ==>> $groupForDigi');
 
-              if (map['WMST'] != null) {
-                if (map['WMST'] != 1) {
-                  map['WMST']--;
-                }
-              }
+              // if (map['WMST'] != null) {
+              //   if (map['WMST'] != 1) {
+              //     map['WMST']--;
+              //   }
+              // }
 
-              if (map['WMS2'] != null) {
-                if (map['WMS2'] != 1) {
-                  map['WMS2']--;
-                }
-              }
+              // if (map['WMS2'] != null) {
+              //   if (map['WMS2'] != 1) {
+              //     map['WMS2']--;
+              //   }
+              // }
 
               print('##6jul  map ==>> $map');
 
@@ -278,8 +278,8 @@ class _MapdmsxState extends State<Mapdmsx> {
               mapPrices['WMMR'] = 35.0;
               mapPrices['FUCN'] = 20.0;
               mapPrices['FURM'] = 20.0;
-              mapPrices['WMST'] = 10.0;
-              mapPrices['WMS2'] = 10.0;
+              mapPrices['WMST'] = 5.0;
+              mapPrices['WMS2'] = 5.0;
 
               for (var item4 in groupForDigi) {
                 total = total + (map[item4] * mapPrices[item4]);
@@ -414,8 +414,8 @@ class _MapdmsxState extends State<Mapdmsx> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    //Icon(Icons.read_more_rounded),
-                    Text('$total ฿'),
+                    Icon(Icons.read_more_rounded),
+                    //Text('$total ฿'),
                     Text('ผลดำเนินการ', style: TextStyle(fontSize: 8)),
                     //Text('ประสิทธิภาพ', style: TextStyle(fontSize: 8)),
                   ],
@@ -450,7 +450,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                   children: [
                     Icon(
                       Icons.pin_drop,
-                      color: Colors.green,
+                      color: Colors.green
                     ),
                     Text(
                       amountGreen.toString(),
@@ -458,7 +458,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                     ),
                     Text(
                       'รอดำเนินการ',
-                      style: TextStyle(fontSize: 8),
+                      style: TextStyle(fontSize: 6),
                     ),
                   ],
                 ),
@@ -500,7 +500,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                     ),
                     Text(
                       'ให้ต่อกลับ',
-                      style: TextStyle(fontSize: 8),
+                      style: TextStyle(fontSize: 6),
                     ),
                   ],
                 ),
@@ -705,7 +705,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove_red_eye),
+                      Icon(Icons.remove_red_eye, size: 12,),
                       Text(
                         markers.length.toString(),
                         style: TextStyle(fontSize: 10),
