@@ -25,7 +25,7 @@ class _FooterState extends State<Footer> {
     return Column(
       children: [
         Text('$companyName', style: Theme.of(context).textTheme.headline5,),
-        RaisedButton(
+        ElevatedButton(
           onPressed: changeCompanyName,
           child: Text('click Me'),
         ),

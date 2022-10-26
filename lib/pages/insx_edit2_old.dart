@@ -80,8 +80,6 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
             showLocation(),
             SizedBox(height: 80),
             groupImage(),
- 
-          
           ],
         ),
       ),
@@ -155,15 +153,14 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
               style: TextStyle(fontSize: 12),
             ),
           ),
-           IconButton(
-                  icon: Icon(Icons.copy_outlined),
-                  onPressed: () {
-                    Clipboard.setData(
-                        ClipboardData(text: "${insxModel2.ca}"));
-                    print(insxModel2.pea_no);
-                    Fluttertoast.showToast(msg: 'คัดลอก ${insxModel2.ca}');
-                  },
-                ),
+          IconButton(
+            icon: Icon(Icons.copy_outlined),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: "${insxModel2.ca}"));
+              print(insxModel2.pea_no);
+              Fluttertoast.showToast(msg: 'คัดลอก ${insxModel2.ca}');
+            },
+          ),
         ],
       );
 
@@ -193,7 +190,8 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
                     Clipboard.setData(
                         ClipboardData(text: "Gis ${insxModel2.pea_no}"));
                     print(insxModel2.pea_no);
-                    Fluttertoast.showToast(msg: 'คัดลอก Gis ${insxModel2.pea_no}');
+                    Fluttertoast.showToast(
+                        msg: 'คัดลอก Gis ${insxModel2.pea_no}');
                   },
                 ),
               ],
@@ -248,24 +246,29 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
         ],
       );
 
-  Widget groupImage() => RaisedButton.icon(
-      padding: EdgeInsets.all(20),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      color: Colors.red,
-      onPressed: () {
-        confirmDialog();
-      },
-      icon: Icon(
-        Icons.lock_open,
-        color: Colors.white,
-      ),
-      label: Text(
-        'บันทึกข้อมูล',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ));
+  Widget groupImage() => Padding(
+        padding: const EdgeInsets.all(20),
+        child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40)),
+            ),
+            onPressed: () {
+              confirmDialog();
+            },
+            icon: Icon(
+              Icons.lock_open,
+              color: Colors.white,
+            ),
+            label: Text(
+              'บันทึกข้อมูล',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+      );
 
   Future<Null> confirmDialog() async {
     showDialog(
@@ -282,7 +285,6 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
         children: [
           Column(
             children: [
-          
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -350,12 +352,10 @@ class _InsxEdit2OldState extends State<InsxEdit2Old> {
 
   Future<Null> editDataInsx(InsxSQLiteModel insxModel2) async {
     print('####>>>>>> ${insxModel2.id}');
-       Fluttertoast.showToast(msg: 'บันทึกแล้ว');
+    Fluttertoast.showToast(msg: 'บันทึกแล้ว');
 
     await SQLiteHelper()
         .editValueWhereId(insxModel2.id)
         .then((value) => Navigator.pop(context));
   }
-
-
 }

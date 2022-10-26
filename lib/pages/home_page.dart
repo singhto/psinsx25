@@ -69,12 +69,14 @@ class _HomePageState extends State<HomePage> {
   Future<Null> readUserInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    setState(() {
-      nameUser = preferences.getString('staffname');
-      userEmail = preferences.getString('user_email');
-      userImge = preferences.getString('user_img');
-      userId = preferences.getString('id');
-    });
+    nameUser = preferences.getString('staffname');
+    userEmail = preferences.getString('user_email');
+    userImge = preferences.getString('user_img');
+    userId = preferences.getString('id');
+
+    
+
+    setState(() {});
   }
 
   Widget showDrawerHeader() {
@@ -213,10 +215,9 @@ class _HomePageState extends State<HomePage> {
               Text(
                 online ? ' ออนไลน์' : ' ออฟไลน์',
                 style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.bold,
-                  color: online ? Colors.green : Colors.red
-                ),
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold,
+                    color: online ? Colors.green : Colors.red),
               ),
             ],
           ),
@@ -254,13 +255,13 @@ class _HomePageState extends State<HomePage> {
           showUnselectedLabels: true,
           currentIndex: selectedIndex,
           onTap: (int index) {
-           if (online) {
+            if (online) {
               setState(() {
-              selectedIndex = index;
-            });
-           } else {
-             normalDialog(context, 'กรุณาเปิดโหมด ออนไลน์ ก่อนครับ');
-           }
+                selectedIndex = index;
+              });
+            } else {
+              normalDialog(context, 'กรุณาเปิดโหมด ออนไลน์ ก่อนครับ');
+            }
           },
           items: [
             BottomNavigationBarItem(

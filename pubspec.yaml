@@ -50,6 +50,7 @@ dependencies:
   file_picker: ^4.2.7
   intl: ^0.17.0
   webview_flutter: ^3.0.4
+  get: ^4.6.5
 
 flutter_icons:
   android: true

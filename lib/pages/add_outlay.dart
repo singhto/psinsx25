@@ -424,14 +424,14 @@ class _AddOutLayState extends State<AddOutLay> {
           SizedBox(
             width: 10.0,
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () => _selectDate(context), // Refer step 3
             child: Text(
               'เลือกวันที่',
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            color: Colors.greenAccent,
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.greenAccent),
           ),
         ],
       );

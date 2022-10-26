@@ -16,7 +16,7 @@ Future<void> normalDialog(BuildContext context, String message) async {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FlatButton(
+            TextButton(
                 onPressed: () => Navigator.pop(context), child: Text('OK')),
           ],
         )

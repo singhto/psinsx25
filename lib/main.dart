@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:psinsx/offlineMode/home_offline.dart';
 import 'package:psinsx/pages/home_page.dart';
 import 'package:psinsx/pages/insx_page_old.dart';
@@ -77,7 +78,7 @@ Future<Null> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'สดุดียี่สิบสาม',
       theme: ThemeData(
           fontFamily: 'Prompt',
