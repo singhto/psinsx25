@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:psinsx/pages/help_page.dart';
 import 'package:psinsx/pages/search_dmsx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,16 +52,20 @@ class _DashbordState extends State<Dashbord> {
                   ),
                 ),
               ),
-               Container(
-                padding: const EdgeInsets.all(8),
-                color: Color.fromARGB(255, 29, 200, 66),
-                child: Column(
-                  children: [
-                    Icon(Icons.book, size: 100,),
-                    Text('คู่มือ'),
-                  ],
-                ),
-              ),
+               InkWell(onTap: () {
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => HelpPage(),));
+               },
+                 child: Container(
+                  padding: const EdgeInsets.all(8),
+                  color: Color.fromARGB(255, 29, 200, 66),
+                  child: Column(
+                    children: [
+                      Icon(Icons.book, size: 100,),
+                      Text('คู่มือ'),
+                    ],
+                  ),
+                             ),
+               ),
               Container(
                 padding: const EdgeInsets.all(8),
                 color: Color.fromARGB(255, 195, 55, 78),
@@ -97,7 +102,7 @@ class _DashbordState extends State<Dashbord> {
                 child: Column(
                   children: [
                     Icon(Icons.settings, size: 100,),
-                    Text('Veision 1.42'),
+                    Text('Veision 1.44'),
                   ],
                 ),
               ),

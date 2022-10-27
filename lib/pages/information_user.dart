@@ -81,7 +81,7 @@ class _InformationUserState extends State<InformationUser> {
               style: TextStyle(fontSize: 12),
             ),
             Text(
-              'สายด่วน : 0897037118 เลขภาษี 0675560000081',
+              'เลขภาษี 0675560000081',
               style: TextStyle(fontSize: 12),
             ),
             ClipPath(

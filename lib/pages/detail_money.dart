@@ -163,7 +163,7 @@ class _DetaliMoneyState extends State<DetaliMoney> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            showIncome(),
+            //showIncome(),
             Divider(
               color: Color.fromARGB(255, 237, 237, 234),
             ),

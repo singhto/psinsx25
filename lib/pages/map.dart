@@ -9,9 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:psinsx/models/insx_model2.dart';
 import 'package:psinsx/models/insx_sqlite_model.dart';
-import 'package:psinsx/pages/insx_edit.dart';
 import 'package:psinsx/pages/insx_edit_old.dart';
-import 'package:psinsx/pages/insx_page.dart';
 import 'package:psinsx/pages/insx_page_old.dart';
 import 'package:psinsx/utility/custom_dialog.dart';
 import 'package:psinsx/utility/my_constant.dart';
@@ -362,16 +360,7 @@ class _MyMapState extends State<MyMap> {
 
     print('##### จำนวนของ ขนาด sql $timeEdit');
 
-    if (insxModelForEdits.length != 0) {
-      // ProgressDialog pr = ProgressDialog(context, isDismissible: false);
-      // pr.style(
-      //     message: 'Loading...',
-      //     progressWidget: Container(
-      //       margin: EdgeInsets.all(10),
-      //       child: CircularProgressIndicator(),
-      //     ));
-      // pr.show();
-
+    if (insxModelForEdits.isNotEmpty) {
       setState(() {
         statusProcessEdit = true;
       });
@@ -417,10 +406,13 @@ class _MyMapState extends State<MyMap> {
         .editDataInsx2(
             insxModel2: insxModel2, distance: distanceStr, work_image: '')
         .then((value) {
-      if (value.toString() == 'true') {
-      } else {
-        Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด กรุณาลองใหม่');
-      }
+
+          print('##26oct === myProsess $value');
+
+      // if (value.toString() == 'true') {
+      // } else {
+      //   Fluttertoast.showToast(msg: 'เกิดข้อผิดพลาด กรุณาลองใหม่');
+      // }
     });
 
     // String url =

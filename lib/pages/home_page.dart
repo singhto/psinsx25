@@ -54,6 +54,12 @@ class _HomePageState extends State<HomePage> {
   UserModel userModel;
 
   bool online = true;
+  var title = <String>[
+    'แจ้งเตือน',
+    'งดจ่ายไฟ',
+    'ประวัติ',
+    'หน้าหลัก',
+  ];
 
   @override
   void initState() {
@@ -233,12 +239,9 @@ class _HomePageState extends State<HomePage> {
         title: Center(
           child: Row(
             children: [
-              Text(
-                '$nameUser',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
+              ShowText(
+                text: title[selectedIndex],
+                textStyle: MyConstant().h2Style(),
               ),
               Text(
                 online ? ' ออนไลน์' : ' ออฟไลน์',
@@ -251,14 +254,16 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          Switch(
-              value: online,
-              onChanged: (velue) {
-                setState(() {
-                  online = velue;
-                  cratePages();
-                });
-              }),
+          selectedIndex == 0
+              ? Switch(
+                  value: online,
+                  onChanged: (velue) {
+                    setState(() {
+                      online = velue;
+                      cratePages();
+                    });
+                  })
+              : const SizedBox(),
           InkWell(
             onTap: () {
               moveToEditProfile();
