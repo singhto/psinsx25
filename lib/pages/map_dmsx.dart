@@ -14,6 +14,7 @@ import 'package:psinsx/pages/detail_money.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
 import 'package:psinsx/utility/my_calculate.dart';
 import 'package:psinsx/utility/my_constant.dart';
+import 'package:psinsx/utility/my_dialog.dart';
 import 'package:psinsx/utility/my_style.dart';
 import 'package:psinsx/utility/my_utility.dart';
 import 'package:psinsx/utility/normal_dialog.dart';
@@ -22,6 +23,7 @@ import 'package:psinsx/widgets/show_proogress.dart';
 import 'package:path/path.dart' as path;
 import 'package:psinsx/widgets/show_tetle.dart';
 import 'package:psinsx/widgets/show_text.dart';
+import 'package:psinsx/widgets/widget_text_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Mapdmsx extends StatefulWidget {
@@ -448,10 +450,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.pin_drop,
-                      color: Colors.green
-                    ),
+                    Icon(Icons.pin_drop, color: Colors.green),
                     Text(
                       amountGreen.toString(),
                       style: TextStyle(fontSize: 10),
@@ -629,12 +628,62 @@ class _MapdmsxState extends State<Mapdmsx> {
                       child: Text('นำทาง'),
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          processTakePhoto(
-                              dmsxmodel: dmsxModels[indexDirection],
-                              source: ImageSource.gallery);
-                        },
-                        child: ShowText(text: 'เลือกรูป')),
+                      onPressed: () {
+                        MyDialog(context: context).normalDialot(
+                            title: 'รูปถ่ายก่อนงดจ่ายไฟ',
+                            subTitle:
+                                'คำแนะนำ : คุณต้องถ่ายรูปก่อนดำเนินการงดจ่ายไฟหรือไม่',
+                            firstButton: WidgetTextButton(
+                              label: 'ถ่ายรูป',
+                              pressFunc: () async {
+                                print(
+                                    '##29jan press toakphoto -->> ${dmsxModels[indexDirection].toMap()}');
+
+                                var result = await ImagePicker().pickImage(
+                                  source: ImageSource.camera,
+                                  maxWidth: 800,
+                                  maxHeight: 800,
+                                );
+
+                                if (result != null) {
+                                  File file = File(result.path);
+
+                                  String urlUpload =
+                                      'https://pea23.com/apipsinsx/saveFileBeforDmsx.php';
+                                  String nameFile =
+                                      '${dmsxModels[indexDirection].ca}_${dmsxModels[indexDirection].dataStatus}.jpg';
+                                  Map<String, dynamic> map = {};
+                                  map['file'] = await MultipartFile.fromFile(
+                                      file.path,
+                                      filename: nameFile);
+                                  FormData formData = FormData.fromMap(map);
+                                  await Dio()
+                                      .post(urlUpload, data: formData)
+                                      .then((value) async {
+                                    String urlImage =
+                                        'https://pea23.com/apipsinsx/uploadBeforDmsx/$nameFile';
+                                    print('##29jan --> $urlImage');
+
+                                    String urlInsert =
+                                        'https://pea23.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection].ca}&image=$urlImage&userId=${dmsxModels[indexDirection].userId}';
+                                    await Dio().get(urlInsert).then((value) {
+                                      Navigator.pop(context);
+                                    });
+                                  });
+                                }
+                              },
+                            ),
+                            secondButton: WidgetTextButton(
+                              label: 'ไม่',
+                              pressFunc: () {
+                                processTakePhoto(
+                                    dmsxmodel: dmsxModels[indexDirection],
+                                    source: ImageSource.gallery);
+                              },
+                            ));
+                      },
+                      child: ShowText(text: 'เลือกรูป'),
+                    ),
                   ],
                 ),
               ],
@@ -705,7 +754,10 @@ class _MapdmsxState extends State<Mapdmsx> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove_red_eye, size: 12,),
+                      Icon(
+                        Icons.remove_red_eye,
+                        size: 12,
+                      ),
                       Text(
                         markers.length.toString(),
                         style: TextStyle(fontSize: 10),
