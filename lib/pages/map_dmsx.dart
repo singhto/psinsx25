@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:psinsx/models/dmsx_befor_image_model.dart';
 import 'package:psinsx/models/dmsx_model.dart';
 import 'package:psinsx/pages/detail_money.dart';
 import 'package:psinsx/pages/dmsx_list_page.dart';
@@ -23,6 +25,7 @@ import 'package:psinsx/widgets/show_proogress.dart';
 import 'package:path/path.dart' as path;
 import 'package:psinsx/widgets/show_tetle.dart';
 import 'package:psinsx/widgets/show_text.dart';
+import 'package:psinsx/widgets/widget_icon_button.dart';
 import 'package:psinsx/widgets/widget_text_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -68,6 +71,8 @@ class _MapdmsxState extends State<Mapdmsx> {
   var groupNameImages = <String>[];
 
   double total = 0;
+
+  bool displayIconTakePhoto = true;
 
   @override
   void initState() {
@@ -125,6 +130,9 @@ class _MapdmsxState extends State<Mapdmsx> {
     Marker marker = Marker(
       onTap: () {
         indexDirection = index;
+
+        checkDisplayIconTakePhoto(dmsxmodel: dmsxModels[indexDirection]);
+
         latDirection = double.parse(dmsxmodel.lat.trim());
         lngDirection = double.parse(dmsxmodel.lng.trim());
         setState(() {
@@ -629,16 +637,21 @@ class _MapdmsxState extends State<Mapdmsx> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        processTakePhoto(
+                            dmsxmodel: dmsxModels[indexDirection],
+                            source: ImageSource.gallery);
+                      },
+                      child: ShowText(text: 'เลือกรูป'),
+                    ),
+                  displayIconTakePhoto ?  WidgetIconButton(
+                      iconData: Icons.warning_outlined,
+                      pressFunc: () async {
                         MyDialog(context: context).normalDialot(
-                            title: 'รูปถ่ายก่อนงดจ่ายไฟ',
-                            subTitle:
-                                'คำแนะนำ : คุณต้องถ่ายรูปก่อนดำเนินการงดจ่ายไฟหรือไม่',
+                            title: 'ยืนยันถ่ายภาพก่อนงดจ่ายไฟ',
+                            subTitle: 'คำแนะนำ: หากต้องการเก็บหลักฐานสภาพแวดล้อมของมิเตอร์ กรุณาถ่ายภาพ',
                             firstButton: WidgetTextButton(
-                              label: 'ถ่ายรูป',
+                              label: 'ถ่ายภาพ',
                               pressFunc: () async {
-                                print(
-                                    '##29jan press toakphoto -->> ${dmsxModels[indexDirection].toMap()}');
-
                                 var result = await ImagePicker().pickImage(
                                   source: ImageSource.camera,
                                   maxWidth: 800,
@@ -668,22 +681,14 @@ class _MapdmsxState extends State<Mapdmsx> {
                                         'https://pea23.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection].ca}&image=$urlImage&userId=${dmsxModels[indexDirection].userId}';
                                     await Dio().get(urlInsert).then((value) {
                                       Navigator.pop(context);
+                                      checkDisplayIconTakePhoto(dmsxmodel: dmsxModels[indexDirection]);
                                     });
                                   });
                                 }
                               },
-                            ),
-                            secondButton: WidgetTextButton(
-                              label: 'ไม่',
-                              pressFunc: () {
-                                processTakePhoto(
-                                    dmsxmodel: dmsxModels[indexDirection],
-                                    source: ImageSource.gallery);
-                              },
                             ));
                       },
-                      child: ShowText(text: 'เลือกรูป'),
-                    ),
+                    ) : const SizedBox()
                   ],
                 ),
               ],
@@ -1227,6 +1232,33 @@ class _MapdmsxState extends State<Mapdmsx> {
           return statusText;
         }
     }
+  }
+
+  Future<void> checkDisplayIconTakePhoto(
+      {@required Dmsxmodel dmsxmodel}) async {
+    DateTime dateTime = DateTime.now();
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    String currentDateTime = dateFormat.format(dateTime);
+    print('##29jan currentDateTime $currentDateTime');
+
+    String urlAPI =
+        'https://pea23.com/apipsinsx/getDmsxBeforImage.php?isAdd=true&dateStatus=$currentDateTime';
+    await Dio().get(urlAPI).then((value) {
+      if (value.toString() == 'null') {
+        displayIconTakePhoto = true;
+      } else {
+        for (var element in json.decode(value.data)) {
+          DmsxBeforImageModel model = DmsxBeforImageModel.fromMap(element);
+
+          print('##29jan --->> dmsxModel ${model.toMap()}');
+
+          if (model.ca == dmsxmodel.ca) {
+            displayIconTakePhoto = false;
+          }
+        }
+      }
+      setState(() {});
+    });
   }
 }
 

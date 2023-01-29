@@ -26,7 +26,7 @@ class MyDialog {
           firstButton ?? const SizedBox(),
           secondButton ??
               WidgetTextButton(
-                  label: 'Cancel',
+                  label: 'ยกเลิก',
                   pressFunc: () {
                     Navigator.pop(context);
                   })
