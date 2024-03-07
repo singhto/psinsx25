@@ -14,7 +14,6 @@ import 'package:psinsx/pages/help_page.dart';
 import 'package:psinsx/pages/information_user.dart';
 import 'package:psinsx/pages/map.dart';
 import 'package:psinsx/pages/map2.dart';
-import 'package:psinsx/pages/map_dmsx.dart';
 import 'package:psinsx/pages/search_page.dart';
 import 'package:psinsx/pages/signin_page.dart';
 import 'package:psinsx/pages/take_photo_id.dart';
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   List pages = [
     MyMap2(),
-    Mapdmsx(),
+    // Mapdmsx(),
     SearchPage(),
     Dashbord(),
   ];
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
   bool online = true;
   var title = <String>[
     'แจ้งเตือน',
-    'งดจ่ายไฟ',
+    // 'งดจ่ายไฟ',
     'ประวัติ',
     'หน้าหลัก',
   ];
@@ -73,7 +72,7 @@ class _HomePageState extends State<HomePage> {
       pages.clear();
     }
     pages.add(online ? MyMap2() : MyMap());
-    pages.add(Mapdmsx());
+    // pages.add(Mapdmsx());
     pages.add(SearchPage());
     pages.add(Dashbord());
   }
@@ -226,9 +225,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Divider(),
             ListTile(
-              title: Text('Version 1.44'),
+              title: Text('Version 1.45'),
               subtitle: Text(
-                'อัพเดทเมื่อ 26 ตุลาคม 2565',
+                'อัพเดทเมื่อ 7 กันยายน 2566',
                 style: TextStyle(fontSize: 10),
               ),
             ),
@@ -301,10 +300,10 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               label: 'แจ้งเตือน',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'งดจ่ายไฟ',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.map),
+            //   label: 'งดจ่ายไฟ',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),
               label: 'ประวัติ',

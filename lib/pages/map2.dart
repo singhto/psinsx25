@@ -130,16 +130,16 @@ class _MyMap2State extends State<MyMap2> {
       latLngRed =
           LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
     } else if (diferDate >= 3) {
-      result = hues[2]; //blue 150
+      result = hues[2]; //blue
       blueInt++;
       latLngBlue =
           LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
     } else if (diferDate >= 1) {
-      result = hues[1]; // yellow 60
+      result = hues[1]; // yellow
       yellowInt++;
       latLngYellow =
           LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
-    } else {
+    }  else {
       greenInt++;
       result = hues[0];
       latLngGreen =
@@ -266,7 +266,6 @@ class _MyMap2State extends State<MyMap2> {
                 size: 30,
                 color: Color.fromARGB(255, 248, 245, 245),
               ),
-            
               Text(
                 '${insxModel2s.length}',
                 style: TextStyle(
