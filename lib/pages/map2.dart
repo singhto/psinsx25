@@ -148,7 +148,6 @@ class _MyMap2State extends State<MyMap2> {
     return result;
   }
   int calculageDifdate(String notidate, InsxModel2 insxModel2) {
-    List<double> hues = [80.0, 60.0, 200.0, 20.0];
     List<String> strings = notidate.split(" ");
     List<String> dateTimeInts = strings[0].split('-');
     DateTime notiDateTime = DateTime(
@@ -159,31 +158,8 @@ class _MyMap2State extends State<MyMap2> {
 
     DateTime currentDateTime = DateTime.now();
     int diferDate = currentDateTime.difference(notiDateTime).inDays +1;
-    double result; //green
-
     
-
-    if (diferDate >= 6) {
-      result = hues[3]; //red 20
-      redInt++;
-      latLngRed =
-          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
-    } else if (diferDate >= 2) {
-      result = hues[2]; //blue
-      blueInt++;
-      latLngBlue =
-          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
-    } else if (diferDate >= 1) {
-      result = hues[1]; // yellow
-      yellowInt++;
-      latLngYellow =
-          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
-    }  else {
-      greenInt++;
-      result = hues[0];
-      latLngGreen =
-          LatLng(double.parse(insxModel2.lat), double.parse(insxModel2.lng));
-    }
+    
     return diferDate;
   }
 
