@@ -161,6 +161,8 @@ class _MyMap2State extends State<MyMap2> {
     int diferDate = currentDateTime.difference(notiDateTime).inDays +1;
     double result; //green
 
+    
+
     if (diferDate >= 6) {
       result = hues[3]; //red 20
       redInt++;
