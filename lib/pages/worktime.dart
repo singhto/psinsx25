@@ -187,7 +187,7 @@ class _WorkTimeState extends State<WorkTime> {
                 await MultipartFile.fromFile(file.path, filename: nameFile);
             FormData formData = FormData.fromMap(map);
 
-            var path = 'https://www.pea23.com/saveImage.php';
+            var path = 'https://www.dissrecs.com/saveImage.php';
             await Dio().post(path, data: formData).then((value) async {
               //inseart value to DB
               // print(
@@ -195,7 +195,7 @@ class _WorkTimeState extends State<WorkTime> {
               // print('@@ lat = $lat, lng == $lng');
 
               String pathInsert =
-                  'https://www.pea23.com/apipsinsx/addWorkTime.php?isAdd=true&dat_work=$datWork&start_work=$startWork&start_work_image=$nameFile&create_by=$createby&start_work_lat=$lat&start_work_lng=$lng';
+                  'https://www.dissrecs.com/apipsinsx/addWorkTime.php?isAdd=true&dat_work=$datWork&start_work=$startWork&start_work_image=$nameFile&create_by=$createby&start_work_lat=$lat&start_work_lng=$lng';
               await Dio().get(pathInsert).then((value) {
                 if (value.toString() == 'true') {
                   // print('@@ Success Insert');

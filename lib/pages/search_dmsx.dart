@@ -145,7 +145,7 @@ class _SearchDmsxState extends State<SearchDmsx> {
     }
 
     String path =
-        'https://www.pea23.com/apipsinsx/getDmsxLocationWhereCa.php?isAdd=true&ca=$search';
+        'https://www.dissrecs.com/apipsinsx/getDmsxLocationWhereCa.php?isAdd=true&ca=$search';
     await Dio().get(path).then((value) {
       Navigator.pop(context);
       if (value.toString() == 'null') {

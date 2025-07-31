@@ -224,7 +224,7 @@ class _AddInformationUserState extends State<AddInformationUser> {
     String id = userModel.userId;
     
     String url =
-        'https://www.pea23.com/apipsinsx/editUserWhereId.php?isAdd=true&user_id=$id&user_email=$userEmail &user_phone=$userPhone&user_adress=$userAddress&user_bank_name=$userBankName&user_bank_number=$userBankNumber&user_img=$userImg';
+        'https://www.dissrecs.com/apipsinsx/editUserWhereId.php?isAdd=true&user_id=$id&user_email=$userEmail &user_phone=$userPhone&user_adress=$userAddress&user_bank_name=$userBankName&user_bank_number=$userBankNumber&user_img=$userImg';
     
     Response response = await Dio().get(url);
     

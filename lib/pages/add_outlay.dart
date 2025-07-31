@@ -178,7 +178,7 @@ class _AddOutLayState extends State<AddOutLay> {
       );
 
   Future<Null> uploadOutlayInserData() async {
-    String urlUpload = 'https://www.pea23.com/apipsinsx/saveFileOutlay.php';
+    String urlUpload = 'https://www.dissrecs.com/apipsinsx/saveFileOutlay.php';
 
     Random random = Random();
 
@@ -209,7 +209,7 @@ class _AddOutLayState extends State<AddOutLay> {
         print(createDate.toString());
 
         String urlInsertData =
-            'https://www.pea23.com/apipsinsx/addDataOutlay.php?isAdd=true&costType_id=1&supplier_name=$supplierName&supplier_address=$supplierAddress&supplier_taxid=$supplierTaxid&orderFrom_id=1&branch=$branch&user_id=$userId&details=$details&number=$number&priceUnit=$priceUnit&sum=$sum&tax=$tax&referenceNumber=$referenceNumber&image=$urlPathImage&createdAt=$createDate&outlay_status=NO&create_by=$userId&create_date=$createDate';
+            'https://www.dissrecs.com/apipsinsx/addDataOutlay.php?isAdd=true&costType_id=1&supplier_name=$supplierName&supplier_address=$supplierAddress&supplier_taxid=$supplierTaxid&orderFrom_id=1&branch=$branch&user_id=$userId&details=$details&number=$number&priceUnit=$priceUnit&sum=$sum&tax=$tax&referenceNumber=$referenceNumber&image=$urlPathImage&createdAt=$createDate&outlay_status=NO&create_by=$userId&create_date=$createDate';
         await Dio().get(urlInsertData);
         showToast('อัพโหลดสำเร็จ', gravity: Toast.center);
         routeTuService();

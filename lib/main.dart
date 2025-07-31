@@ -17,9 +17,9 @@ final Map<String, WidgetBuilder> map = {
   '/signIn': (BuildContext context) => SignIn(),
   '/homeOffline': (BuildContext context) => HomeOffline(),
   '/mapDmsx': (BuildContext context) => Mapdmsx(),
-  '/workTime': (BuildContext context) => WorkTime(),
-  '/outTime': (BuildContext context) => OutTime(),
-  '/waitWork': (BuildContext context) => WaitWork(),
+  // '/workTime': (BuildContext context) => WorkTime(),
+  // '/outTime': (BuildContext context) => OutTime(),
+  // '/waitWork': (BuildContext context) => WaitWork(),
   '/insxPage': (BuildContext context) => InsxPageOld(),
 };
 

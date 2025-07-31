@@ -29,7 +29,7 @@ class _SeachOutlayState extends State<SeachOutlay> {
       subModels.clear();
     }
     String url =
-        'https://www.pea23.com/apipsinsx/getAllDataLocationWhereTexid.php?isAdd=true&supplier_taxid=$search';
+        'https://www.dissrecs.com/apipsinsx/getAllDataLocationWhereTexid.php?isAdd=true&supplier_taxid=$search';
 
     var response = await Dio().get(url);
 

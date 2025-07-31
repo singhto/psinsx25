@@ -49,7 +49,7 @@ class _ReportPageState extends State<ReportPage> {
     String workername = preferences.getString('staffname');
 
     String url =
-        'https://www.pea23.com/apipsinsx/getInsxWhereUserSuccess.php?isAdd=true&worker_name=$workername';
+        'https://www.dissrecs.com/apipsinsx/getInsxWhereUserSuccess.php?isAdd=true&worker_name=$workername';
     await Dio().get(url).then((value) {
       setState(() {
         loadStatus = false;

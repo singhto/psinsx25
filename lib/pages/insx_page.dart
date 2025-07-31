@@ -294,7 +294,7 @@ class _InsxPageState extends State<InsxPage> {
       FormData data = FormData.fromMap(map);
       await Dio().post(apiSaveFile, data: data).then((value) {
         //print('====>>> $value');
-        //print('Success url Image ==>> https://pea23.com/apipsinsx/upload/$fileName');
+        //print('Success url Image ==>> https://dissrecs.com/apipsinsx/upload/$fileName');
         urlImage = '${MyConstant().domain}/apipsinsx/upload/$fileName';
         print('=== usrlImage == $urlImage');
 

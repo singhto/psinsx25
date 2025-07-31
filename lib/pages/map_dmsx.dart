@@ -185,7 +185,7 @@ class _MapdmsxState extends State<Mapdmsx> {
           dmsxModels.clear();
         }
         String path =
-            'https://www.pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
+            'https://www.dissrecs.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
 
         print('###1may path ==>>> $path');
 
@@ -535,7 +535,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
-                  //     builder: (context) => const ShowWebView(url: 'https://www.pea23.com/index.php',),
+                  //     builder: (context) => const ShowWebView(url: 'https://www.dissrecs.com/index.php',),
                   //   ),
                   // );
                 },
@@ -547,7 +547,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Future<Null> launchURLloadWork() async {
-    final url = 'https://www.pea23.com/index.php';
+    final url = 'https://www.dissrecs.com/index.php';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);
@@ -662,7 +662,7 @@ class _MapdmsxState extends State<Mapdmsx> {
                                   File file = File(result.path);
 
                                   String urlUpload =
-                                      'https://pea23.com/apipsinsx/saveFileBeforDmsx.php';
+                                      'https://www.dissrecs.com/apipsinsx/saveFileBeforDmsx.php';
                                   String nameFile =
                                       '${dmsxModels[indexDirection].ca}_${dmsxModels[indexDirection].dataStatus}.jpg';
                                   Map<String, dynamic> map = {};
@@ -674,11 +674,11 @@ class _MapdmsxState extends State<Mapdmsx> {
                                       .post(urlUpload, data: formData)
                                       .then((value) async {
                                     String urlImage =
-                                        'https://pea23.com/apipsinsx/uploadBeforDmsx/$nameFile';
+                                        'https://www.dissrecs.com/apipsinsx/uploadBeforDmsx/$nameFile';
                                     print('##29jan --> $urlImage');
 
                                     String urlInsert =
-                                        'https://pea23.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection].ca}&image=$urlImage&userId=${dmsxModels[indexDirection].userId}';
+                                        'https://www.dissrecs.com/apipsinsx/insertDataBeforDmsx.php?isAdd=true&ca=${dmsxModels[indexDirection].ca}&image=$urlImage&userId=${dmsxModels[indexDirection].userId}';
                                     await Dio().get(urlInsert).then((value) {
                                       Navigator.pop(context);
                                       checkDisplayIconTakePhoto(dmsxmodel: dmsxModels[indexDirection]);
@@ -730,7 +730,7 @@ class _MapdmsxState extends State<Mapdmsx> {
   }
 
   Future<Null> launchURL() async {
-    final url = 'https://www.pea23.com';
+    final url = 'https://www.dissrecs.com';
     await launch(url);
     if (await canLaunch(url)) {
       await launch(url);
@@ -1094,7 +1094,7 @@ class _MapdmsxState extends State<Mapdmsx> {
 
   Future<void> processUploadAndEdit(
       File file, String nameFile, Dmsxmodel dmsxmodel) async {
-    String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
+    String pathUpload = 'https://www.dissrecs.com/apipsinsx/saveImageCustomer.php';
 
     Map<String, dynamic> map = {};
     map['file'] = await MultipartFile.fromFile(file.path, filename: nameFile);
@@ -1142,7 +1142,7 @@ class _MapdmsxState extends State<Mapdmsx> {
       print('@@ listStatus === $listStatus');
 
       String apiEditImages =
-          'https://www.pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
+          'https://www.dissrecs.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
 
       await Dio().get(apiEditImages).then((value) {
         print('value update == $value');
@@ -1242,7 +1242,7 @@ class _MapdmsxState extends State<Mapdmsx> {
     print('##29jan currentDateTime $currentDateTime');
 
     String urlAPI =
-        'https://pea23.com/apipsinsx/getDmsxBeforImage.php?isAdd=true&dateStatus=$currentDateTime';
+        'https://dissrecs.com/apipsinsx/getDmsxBeforImage.php?isAdd=true&dateStatus=$currentDateTime';
     await Dio().get(urlAPI).then((value) {
       if (value.toString() == 'null') {
         displayIconTakePhoto = true;

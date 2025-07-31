@@ -43,7 +43,7 @@ class _HelpPageState extends State<HelpPage> {
   }
 
   Future<Null> readHelpData() async {
-    String url = 'https://www.pea23.com/apipsinsx/getDataManual.php';
+    String url = 'https://www.dissrecs.com/apipsinsx/getDataManual.php';
     await Dio().get(url).then((value) {
       if (value.toString() != 'null') {
         var result = json.decode(value.data);

@@ -117,7 +117,7 @@ class _OilPageState extends State<OilPage> {
                       onPressed: () async {
                         Navigator.pop(context);
                         String url =
-                            'https://www.pea23.com/apipsinsx/deleteOutlayWhereId.php?isAdd=true&id=${outlayModel.id}';
+                            'https://www.dissrecs.com/apipsinsx/deleteOutlayWhereId.php?isAdd=true&id=${outlayModel.id}';
                         await Dio().get(url).then((value) => readOutlay());
                         showToast('ลบรายการ สำเร็จ', gravity: Toast.center);
                       },

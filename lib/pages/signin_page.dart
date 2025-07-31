@@ -89,7 +89,7 @@ class _SignInState extends State<SignIn> {
 
   Future<Null> checkAuthen() async {
     String url =
-        'https://www.pea23.com/apipsinsx/getUserWhereUserSinghto.php?isAdd=true&username=$user';
+        'https://www.dissrecs.com/apipsinsx/getUserWhereUserSinghto.php?isAdd=true&username=$user';
     ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     pr.style(
         message: 'Loading...',

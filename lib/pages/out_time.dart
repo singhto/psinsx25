@@ -185,7 +185,7 @@ class _OutTimeState extends State<OutTime> {
                 await MultipartFile.fromFile(file.path, filename: nameFile);
             FormData formData = FormData.fromMap(map);
 
-            var path = 'https://www.pea23.com/saveImage.php';
+            var path = 'https://www.dissrecs.com/saveImage.php';
             await Dio().post(path, data: formData).then((value) async {
               //inseart value to DB
               print(
@@ -193,7 +193,7 @@ class _OutTimeState extends State<OutTime> {
               print('@@ lat = $lat, lng == $lng');
 
               String pathEdit =
-                  'https://www.pea23.com/apipsinsx/editWorkTimeWhereDatWork.php?isAdd=true&dat_work=$datWork&out_work=$outWork&out_work_image=$nameFile&out_work_lat=$lat&out_work_lng=$lng&create_by=$createby';
+                  'https://www.dissrecs.com/apipsinsx/editWorkTimeWhereDatWork.php?isAdd=true&dat_work=$datWork&out_work=$outWork&out_work_image=$nameFile&out_work_lat=$lat&out_work_lng=$lng&create_by=$createby';
 
               await Dio().get(pathEdit).then((value) {
                 if (value.toString() == 'true') {

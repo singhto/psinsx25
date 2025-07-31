@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
       dataLocationModels.clear();
     }
     String url =
-        'https://www.pea23.com/apipsinsx/getAllDataLocationWhereCa.php?isAdd=true&ca=$search';
+        'https://www.dissrecs.com/apipsinsx/getAllDataLocationWhereCa.php?isAdd=true&ca=$search';
 
     ProgressDialog pr = ProgressDialog(context, isDismissible: false);
     pr.style(

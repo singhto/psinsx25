@@ -91,7 +91,7 @@ class _TakePhotoIdState extends State<TakePhotoId> {
   }
 
   Future<void> processUploadAndEdit() async {
-    String urlUpload = 'https://pea23.com/apipsinsx/saveImageIdCard.php';
+    String urlUpload = 'https://dissrecs.com/apipsinsx/saveImageIdCard.php';
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -103,11 +103,11 @@ class _TakePhotoIdState extends State<TakePhotoId> {
     map['file'] = await MultipartFile.fromFile(file.path, filename: nameIdCard);
     FormData data = FormData.fromMap(map);
     await Dio().post(urlUpload, data: data).then((value) async {
-      String urlIdCard = 'https://pea23.com/apipsinsx/imageIdCard/$nameIdCard';
+      String urlIdCard = 'https://www.dissrecs.com/apipsinsx/imageIdCard/$nameIdCard';
       print('##26oct url Idcare $urlIdCard');
 
       String urlEdit =
-          'https://pea23.com/apipsinsx/editStaffSurnameWhereId.php?isAdd=true&user_id=$id&staffsurname=$urlIdCard';
+          'https://www.dissrecs.com/apipsinsx/editStaffSurnameWhereId.php?isAdd=true&user_id=$id&staffsurname=$urlIdCard';
 
       await Dio().get(urlEdit).then((value) {
         Fluttertoast.showToast(

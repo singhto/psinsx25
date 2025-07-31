@@ -347,7 +347,7 @@ class _ShowCusnameDetailState extends State<ShowCusnameDetail> {
 
         print('# nameFIle = $nameFile');
 
-        String pathUpload = 'https://www.pea23.com/apipsinsx/saveImageCustomer.php';
+        String pathUpload = 'https://www.dissrecs.com/apipsinsx/saveImageCustomer.php';
 
         Map<String, dynamic> map = {};
         map['file'] =
@@ -380,7 +380,7 @@ class _ShowCusnameDetailState extends State<ShowCusnameDetail> {
           }
 
           String apiEditImages =
-              'https://pea23.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
+              'https://www.dissrecs.com/apipsinsx/editDmsxWhereId.php?isAdd=true&id=${dmsxmodel.id}&images=${images.toString()}&status_txt=$statusText&readNumber=$readNumber';
 
           await Dio().get(apiEditImages).then((value) {
             print('# value update == $value');
@@ -407,7 +407,7 @@ class _ShowCusnameDetailState extends State<ShowCusnameDetail> {
       }
 
       String path =
-          'https://pea23.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
+          'https://www.dissrecs.com/apipsinsx/getDmsxWherUser.php?isAdd=true&user_id=$value';
 
       await Dio().get(path).then((value) {
         for (var item in json.decode(value.data)) {
