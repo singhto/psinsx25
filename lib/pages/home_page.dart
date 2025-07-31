@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 title: Text('Version 1.46'),
                 subtitle: Text(
-                  'อัพเดทเมื่อ 7 มีนาคม 2567',
+                  'อัพเดทเมื่อ 5 สิงหาคม 2567',
                   style: TextStyle(fontSize: 10),
                 ),
               ),
